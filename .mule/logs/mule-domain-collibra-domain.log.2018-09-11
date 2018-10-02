@@ -1,0 +1,954 @@
+INFO  2018-09-11 15:29:20,019 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:29:20,020 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:29:20,344 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 15:29:20,570 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@3d484181: startup date [Tue Sep 11 15:29:20 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 15:29:21,970 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 15:29:22,491 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 15:29:22,515 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 15:29:22,521 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 15:29:22,957 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 15:29:22,960 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 15:29:22,960 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 15:29:22,991 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=61f39bb
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:29:22,991 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=61f39bb
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:29:22,992 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 15:29:23,006 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 15:29:23,016 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 15:29:23,018 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 15:30:13,759 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:30:13,760 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:30:14,019 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 15:30:14,165 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 15:30:14 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 15:30:15,258 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 15:30:15,686 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 15:30:15,701 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 15:30:15,708 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 15:30:16,037 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 15:30:16,040 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 15:30:16,040 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 15:30:16,064 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:30:16,064 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:30:16,065 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 15:30:16,078 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 15:30:16,086 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 15:30:16,088 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 15:30:44,301 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:30:44,302 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:30:44,589 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 15:30:44,772 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 15:30:44 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 15:30:45,924 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 15:30:46,362 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 15:30:46,378 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 15:30:46,385 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 15:30:46,756 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 15:30:46,759 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 15:30:46,759 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 15:30:46,783 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:30:46,783 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:30:46,784 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 15:30:46,806 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 15:30:46,815 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 15:30:46,817 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 15:31:37,586 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:31:37,587 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:31:37,837 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 15:31:37,979 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 15:31:37 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 15:31:39,084 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 15:31:39,499 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 15:31:39,519 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 15:31:39,526 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 15:31:39,865 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 15:31:39,868 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 15:31:39,868 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 15:31:39,894 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:31:39,894 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:31:39,895 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 15:31:39,905 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 15:31:39,914 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 15:31:39,916 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 15:32:33,012 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:32:33,013 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:32:33,267 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 15:32:33,407 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 15:32:33 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 15:32:34,472 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 15:32:34,877 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 15:32:34,892 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 15:32:34,899 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 15:32:35,213 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 15:32:35,215 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 15:32:35,215 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 15:32:35,238 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:32:35,238 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:32:35,238 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 15:32:35,248 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 15:32:35,256 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 15:32:35,257 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 15:38:17,771 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:38:17,773 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:38:18,029 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 15:38:18,180 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 15:38:18 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 15:38:19,330 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 15:38:19,758 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 15:38:19,776 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 15:38:19,782 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 15:38:20,152 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 15:38:20,154 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 15:38:20,154 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 15:38:20,180 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:38:20,181 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:38:20,181 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 15:38:20,196 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 15:38:20,204 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 15:38:20,207 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 15:44:36,047 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:44:36,048 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:44:36,375 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 15:44:36,539 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 15:44:36 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 15:44:37,747 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 15:44:38,170 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 15:44:38,192 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 15:44:38,198 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 15:44:38,524 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 15:44:38,527 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 15:44:38,527 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 15:44:38,555 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:44:38,555 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:44:38,555 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 15:44:38,567 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 15:44:41,143 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 15:44:41,144 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 15:46:27,447 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:46:27,448 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:46:27,732 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 15:46:27,874 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 15:46:27 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 15:46:28,949 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 15:46:29,368 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 15:46:29,383 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 15:46:29,390 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 15:46:29,734 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 15:46:29,736 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 15:46:29,736 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 15:46:29,762 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:46:29,762 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:46:29,762 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 15:46:29,774 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 15:46:32,209 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 15:46:32,210 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 15:49:41,070 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:49:41,071 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:49:41,415 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 15:49:41,571 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 15:49:41 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 15:49:42,835 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 15:49:43,269 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 15:49:43,290 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 15:49:43,296 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 15:49:43,649 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 15:49:43,652 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 15:49:43,652 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 15:49:43,681 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:49:43,682 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:49:43,682 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 15:49:43,697 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 15:49:46,136 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 15:49:46,137 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 15:52:25,564 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:52:25,565 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:52:25,853 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 15:52:26,008 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 15:52:26 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 15:52:27,111 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 15:52:27,533 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 15:52:27,548 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 15:52:27,554 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 15:52:27,897 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 15:52:27,900 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 15:52:27,900 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 15:52:27,926 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:52:27,926 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:52:27,926 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 15:52:27,937 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 15:52:30,372 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 15:52:30,373 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 15:56:08,598 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:56:08,599 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:56:08,884 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 15:56:09,023 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 15:56:09 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 15:56:10,196 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 15:56:10,662 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 15:56:10,679 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 15:56:10,686 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 15:56:11,030 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 15:56:11,032 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 15:56:11,032 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 15:56:11,057 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:56:11,057 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:56:11,057 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 15:56:11,066 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 15:56:13,499 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 15:56:13,500 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 15:57:34,827 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:57:34,828 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:57:35,121 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 15:57:35,268 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 15:57:35 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 15:57:36,307 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 15:57:36,777 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 15:57:36,799 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 15:57:36,807 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 15:57:37,120 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 15:57:37,123 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 15:57:37,123 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 15:57:37,149 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:57:37,149 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:57:37,150 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 15:57:37,159 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 15:57:39,597 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 15:57:39,598 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 15:59:39,408 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:59:39,410 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 15:59:39,829 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 15:59:39,998 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 15:59:39 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 15:59:41,246 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 15:59:41,735 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 15:59:41,757 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 15:59:41,769 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 15:59:42,123 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 15:59:42,134 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 15:59:42,134 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 15:59:42,162 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:59:42,162 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 15:59:42,163 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 15:59:42,174 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 15:59:44,694 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 15:59:44,696 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 16:03:53,681 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 16:03:53,682 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 16:03:53,957 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 16:03:54,105 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 16:03:54 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 16:03:55,146 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 16:03:55,537 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 16:03:55,554 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 16:03:55,561 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 16:03:55,878 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 16:03:55,880 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 16:03:55,880 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 16:03:55,904 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 16:03:55,904 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 16:03:55,905 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 16:03:55,915 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 16:03:58,349 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 16:03:58,351 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 16:05:12,644 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 16:05:12,645 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 16:05:12,933 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 16:05:13,079 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 16:05:13 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 16:05:14,181 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 16:05:14,581 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 16:05:14,600 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 16:05:14,608 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 16:05:14,956 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 16:05:14,959 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 16:05:14,959 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 16:05:14,983 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 16:05:14,983 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 16:05:14,984 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 16:05:14,993 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 16:05:17,433 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 16:05:17,435 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 16:05:51,568 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 16:05:51,569 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 16:05:51,860 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 16:05:52,002 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 16:05:51 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 16:05:53,045 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 16:05:53,443 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 16:05:53,462 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 16:05:53,469 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 16:05:53,811 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 16:05:53,813 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 16:05:53,814 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 16:05:53,841 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 16:05:53,841 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 16:05:53,842 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 16:05:53,851 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 16:05:56,300 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 16:05:56,302 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 16:08:45,047 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 16:08:45,047 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 16:08:45,335 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 16:08:45,493 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 16:08:45 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 16:08:46,664 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 16:08:47,070 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 16:08:47,092 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 16:08:47,098 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 16:08:47,444 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 16:08:47,446 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 16:08:47,446 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 16:08:47,473 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 16:08:47,474 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 16:08:47,474 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 16:08:47,487 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 16:08:47,495 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 16:08:47,497 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************
+INFO  2018-09-11 16:10:05,793 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ New domain 'collibra-domain'                             +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 16:10:05,794 [main] org.mule.module.launcher.domain.DefaultMuleDomain: 
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++ Initializing domain 'collibra-domain'                    +
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+INFO  2018-09-11 16:10:06,037 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising RegistryBroker
+INFO  2018-09-11 16:10:06,175 [main] org.mule.config.spring.MuleDomainContext: Refreshing org.mule.config.spring.MuleDomainContext@7be58f16: startup date [Tue Sep 11 16:10:06 EDT 2018]; root of context hierarchy
+INFO  2018-09-11 16:10:07,274 [main] org.mule.config.spring.processors.ContextExclusiveInjectorProcessor: JSR-330 'javax.inject.Inject' annotation found and supported for autowiring
+INFO  2018-09-11 16:10:07,668 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-tx-log\tx2.log
+INFO  2018-09-11 16:10:07,685 [main] org.mule.util.journal.TransactionJournal: Using files for tx logs C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx1.log and C:\Users\c14699a\AnypointStudio\workspace\.mule\.\.mule\collibra-domain\queue-xa-tx-log\tx2.log
+INFO  2018-09-11 16:10:07,692 [main] org.mule.lifecycle.AbstractLifecycleManager: Initialising connector: shared_vm_connector
+INFO  2018-09-11 16:10:08,027 [main] org.mule.config.spring.SpringXmlDomainConfigurationBuilder: Configured Mule using "org.mule.config.spring.SpringXmlDomainConfigurationBuilder" with configuration resource(s): "[ConfigResource{resourceName='mule-domain-config.xml'}]"
+INFO  2018-09-11 16:10:08,029 [main] org.mule.util.queue.QueueXaResourceManager: Starting ResourceManager
+INFO  2018-09-11 16:10:08,029 [main] org.mule.util.queue.QueueXaResourceManager: Started ResourceManager
+INFO  2018-09-11 16:10:08,054 [main] org.mule.transport.vm.VMConnector: Connected: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 16:10:08,054 [main] org.mule.transport.vm.VMConnector: Starting: VMConnector
+{
+  name=shared_vm_connector
+  lifecycle=initialise
+  this=3bfc6a5e
+  numberOfConcurrentTransactedReceivers=4
+  createMultipleTransactedReceivers=true
+  connected=true
+  supportedProtocols=[vm]
+  serviceOverrides=<none>
+}
+
+INFO  2018-09-11 16:10:08,054 [main] org.mule.lifecycle.AbstractLifecycleManager: Starting connector: shared_vm_connector
+INFO  2018-09-11 16:10:08,064 [main] org.mule.module.management.agent.WrapperManagerAgent: This JVM hasn't been launched by the wrapper, the agent will not run.
+INFO  2018-09-11 16:10:08,071 [main] org.mule.module.management.agent.AbstractJmxAgent: Registered Connector Service with name Mule.collibra-domain:type=Connector,name="shared_vm_connector"
+INFO  2018-09-11 16:10:08,073 [main] org.mule.DefaultMuleContext: 
+**********************************************************************
+* Application: collibra-domain                                       *
+* OS encoding: \, Mule encoding: UTF-8                               *
+*                                                                    *
+* Agents Running:                                                    *
+*   JMX Agent                                                        *
+*   Wrapper Manager                                                  *
+**********************************************************************

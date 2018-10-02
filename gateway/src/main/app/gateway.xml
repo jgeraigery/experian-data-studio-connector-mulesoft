@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting"
+	xmlns:collibra-dgc="http://www.mulesoft.org/schema/mule/collibra-dgc"
+	xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.6.1"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mule-ss="http://www.mulesoft.org/schema/mule/spring-security"
+	xmlns:ss="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/spring-security http://www.mulesoft.org/schema/mule/spring-security/3.1/mule-spring-security.xsd
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.0.xsd
+http://www.mulesoft.org/schema/mule/tls http://www.mulesoft.org/schema/mule/tls/current/mule-tls.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+http://www.mulesoft.org/schema/mule/https http://www.mulesoft.org/schema/mule/https/current/mule-https.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/collibra-dgc http://www.mulesoft.org/schema/mule/collibra-dgc/current/mule-collibra-dgc.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
+
+	<context:property-placeholder location="gateway.properties"/>
+
+	<spring:beans>
+		<ss:authentication-manager alias="authenticationManager">
+			<ss:authentication-provider>
+				<ss:user-service id="userService">
+					<ss:user name="${gateway.user}" password="${gateway.password}"
+						authorities="ROLE_ADMIN" />
+				</ss:user-service>
+			</ss:authentication-provider>
+		</ss:authentication-manager>
+	</spring:beans>
+
+	<mule-ss:security-manager>
+		<mule-ss:delegate-security-provider
+			name="memory-provider" delegate-ref="authenticationManager" />
+	</mule-ss:security-manager>
+
+	<http:listener-config name="HTTP_Listener_Configuration"
+		host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration" />
+	<collibra-dgc:config name="CollibraDGC" username="${dgc.config.user}"
+		password="${dgc.config.password}" baseApplicationUrl="${dgc.config.baseApplicationUrl}"
+		doc:name="CollibraDGC" />
+
+
+	<flow name="Gateway" processingStrategy="synchronous">
+		<http:listener config-ref="HTTP_Listener_Configuration"
+			path="/collibra.connect.gateway" doc:name="HTTP" allowedMethods="POST">
+			<http:response-builder statusCode="#[responseStatusCode]"
+				reasonPhrase="#[responseReasonPhrase]" />
+			<!-- <http:error-response-builder statusCode="#[responseStatusCode]" -->
+			<!-- reasonPhrase="#[responseReasonPhrase]" /> -->
+		</http:listener>
+		<logger level="DEBUG" message="Received a message: #[message]"
+			doc:name="Message" />
+		<logger message="Received a message with payload: #[payload]" level="INFO"
+			doc:name="Payload" />
+		<http:basic-security-filter realm="mule-realm" />
+        <logger message="Authenticated" level="DEBUG" doc:name="Authenticated"/>
+        <set-variable variableName="stashed-payload" value="#[payload]" doc:name="stashed-payload"/>
+        <collibra-dgc:login config-ref="CollibraDGC" doc:name="Login"/>
+        <set-payload value="#[flowVars.'stashed-payload']" doc:name="reverse-payload"/>
+		<choice doc:name="Is 'flowId' present? (YES/NO)">
+			<when expression="#[payload.flowId != null]">
+				<expression-component doc:name="Do nothing"><![CDATA[;]]></expression-component>
+			</when>
+			<otherwise>
+				<scripting:component doc:name="Throw excpetion">
+					<scripting:script engine="Groovy"><![CDATA[throw new java.lang.IllegalArgumentException("Expected x-www-form-urlencoded parameter 'flowId' was not found");]]></scripting:script>
+				</scripting:component>
+			</otherwise>
+		</choice>
+
+		<set-session-variable variableName="dgcWorkflowProcessInstanceId"
+			value="#[payload.dgcWorkflowProcessInstanceId]" doc:name="Set 'DGC Workflow Process Instance Id'" />
+		<set-session-variable variableName="dgcWorkflowMessageEventName"
+			value="#[payload.dgcWorkflowMessageEventName]" doc:name="Set 'DGC Workflow Callback Message Event Name'" />
+		<set-variable variableName="flowToInvoke" value="#[payload.flowId]"
+			doc:name="Set 'Flow To Invoke'" />
+		<set-payload value="#[payload.payload]" doc:name="Set to 'Payload' from message" />
+		<vm:outbound-endpoint exchange-pattern="request-response"
+			path="#[flowVars.flowToInvoke]" doc:name="Start process"
+			connector-ref="shared_vm_connector" />
+		<choice doc:name="Was successful? (NO/YES)">
+			<when expression="#[!(&quot;200&quot; == payload.status)]">
+				<set-variable variableName="responseReasonPhrase"
+					value="Unexpected error occured. Root cause message was: '#[payload.title]'"
+					doc:name="Set reason phrase 'Unexpected error'" />
+				<set-variable variableName="responseStatusCode" value="500"
+					doc:name="Set status code 500" />
+				<set-payload value="#[payload.content]" doc:name="to StackTrace" />
+
+
+			</when>
+			<otherwise>
+				<set-variable variableName="responseReasonPhrase"
+					value="#[payload.title]" doc:name="Set reason phrase 'Success'" />
+				<set-variable variableName="responseStatusCode" value="200"
+					doc:name="Set status code 200" />
+				<set-payload value="#[payload.content]" doc:name="to response content" />
+
+			</otherwise>
+		</choice>
+		<logger message="Sending response" level="DEBUG" doc:name="Sending response" />
+
+
+
+		<choice-exception-strategy doc:name="Choice Exception Strategy">
+			<catch-exception-strategy doc:name="Flow with 'flowId' not found - send 500"
+				when="#[exception.causedBy(org.mule.api.transport.NoReceiverForEndpointException)]">
+				<set-variable variableName="responseStatusCode" value="500"
+					doc:name="Set status code 500" />
+				<set-variable variableName="responseReasonPhrase"
+					value="Flow with id: #[flowVars.flowToInvoke] does not exist"
+					doc:name="Set reason phrase" />
+				<set-payload value="#[exception.getSummaryMessage()]"
+					doc:name="To exception message summary" />
+
+				<!-- <set-property propertyName="http.status" value="500"/> -->
+				<!-- <set-property propertyName="http.reason" value="Flow with id: #[flowVars.flowToInvoke] 
+					does not exist" doc:name="Property"/> -->
+			</catch-exception-strategy>
+			<catch-exception-strategy doc:name="Unknown exception - send 500">
+				<set-variable variableName="responseStatusCode" value="500"
+					doc:name="Set status code 500" />
+				<set-variable variableName="responseReasonPhrase"
+					value="Unexpected error occured. Root cause message was: '#[com.google.common.base.Throwables.getRootCause(exception).getMessage()]'"
+					doc:name="Set reason phrase" />
+				<set-payload value="#[exception.getSummaryMessage()]"
+					doc:name="To exception message summary" />
+
+				<!-- <set-property propertyName="http.status" value="500"/> -->
+				<!-- <set-property propertyName="http.reason" value="Unexpected error 
+					occured. Root cause message was: '#[org.apache.commons.lang.exception.ExceptionUtils.getCause(exception).getMessage()]" 
+					doc:name="Property"/> -->
+			</catch-exception-strategy>
+		</choice-exception-strategy>
+
+	</flow>
+	<flow name="End_Process" processingStrategy="synchronous">
+		<vm:inbound-endpoint exchange-pattern="request-response"
+			path="gateway_end_process" connector-ref="shared_vm_connector"
+			doc:name="End the process" />
+		<choice doc:name="Should send response event to the workflow? (YES/NO)">
+			<when
+				expression="#[sessionVars.dgcWorkflowProcessInstanceId != null &amp;&amp; sessionVars.dgcWorkflowMessageEventName != null]">
+                <expression-component doc:name="Truncate response"><![CDATA[if(payload.content != null) {
+	payload.content = com.google.common.base.Ascii.truncate(payload.content, 1000, "...");
+}]]></expression-component>
+				<logger
+					message="Sending response message with name: &quot;#[sessionVars.dgcWorkflowMessageEventName]&quot; with payload: #[payload] to the workflow with process instance id: &quot;#[sessionVars.dgcWorkflowProcessInstanceId]&quot;"
+					level="DEBUG" doc:name="Sending respose" />
+
+				<collibra-dgc:send-workflow-message-event
+					config-ref="CollibraDGC" doc:name="Send payload as the response event">
+					<collibra-dgc:send-workflow-message-event-request
+						messageName="#[sessionVars.dgcWorkflowMessageEventName]"
+						processInstanceId="#[sessionVars.dgcWorkflowProcessInstanceId]">
+						<collibra-dgc:properties ref="#[payload]" />
+					</collibra-dgc:send-workflow-message-event-request>
+				</collibra-dgc:send-workflow-message-event>
+			</when>
+			<otherwise>
+				<logger
+					message="Not sending the response event because sessionVars.dgcWorkflowProcessInstanceId (#[sessionVars.dgcWorkflowProcessInstanceId]) or sessionVars.dgcWorkflowMessageEventName (#[sessionVars.dgcWorkflowMessageEventName]) is not specified"
+					level="DEBUG" doc:name="Do not send the response" />
+			</otherwise>
+		</choice>
+        <logger message="Logging out" level="DEBUG" doc:name="Logging out"/>
+		<enricher source="#[payload]" target="#[flowVars.ignore]"
+			doc:name="Message Enricher">
+			<collibra-dgc:logout config-ref="CollibraDGC"
+				doc:name="Logout" />
+		</enricher>
+		<catch-exception-strategy doc:name="Catch Exception Strategy">
+			<expression-component doc:name="Set response to 'Failure'"><![CDATA[payload = ["status": "500"];
+payload.title = com.google.common.base.Throwables.getRootCause(exception).getMessage();
+payload.content = com.google.common.base.Throwables.getStackTraceAsString(exception);]]></expression-component>
+		</catch-exception-strategy>
+	</flow>
+
+</mule>

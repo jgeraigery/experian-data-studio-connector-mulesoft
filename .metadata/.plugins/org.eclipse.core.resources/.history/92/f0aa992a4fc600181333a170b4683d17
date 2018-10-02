@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:collibra-dgc="http://www.mulesoft.org/schema/mule/collibra-dgc" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/collibra-dgc http://www.mulesoft.org/schema/mule/collibra-dgc/current/mule-collibra-dgc.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+    <collibra-dgc:config name="CollibraDGC__Connection_Managament_type_strategy" username="Admin" password="Password123" baseApplicationUrl="https://experian-dev-54.collibra.com" doc:name="CollibraDGC: Connection Managament type strategy"/>
+    <db:generic-config name="Generic_Database_Configuration" url="jdbc:postgresql://localhost:5432/test?user=postgres&amp;password=postgres" driverClassName="org.postgresql.Driver" doc:name="Generic Database Configuration"/>
+    <file:connector name="File" autoDelete="false" streaming="true" validateConnections="true" doc:name="File" outputAppend="true">
+    </file:connector>
+    <flow name="testFlow">
+        <poll doc:name="Poll">
+            <fixed-frequency-scheduler frequency="5000"/>
+            <watermark variable="lastRecordId" default-expression="1" update-expression="#[flowVars['previousRecordId']]"/>
+            <db:select config-ref="Generic_Database_Configuration" target="#[payload]" maxRows="10" fetchSize="10" doc:name="Database">
+                <db:dynamic-query><![CDATA[select * from "ALERTS" where > #[flowVars['lastRecordId']] order by no asc]]></db:dynamic-query>
+            </db:select>
+        </poll>
+        <first-successful doc:name="First Successful">
+            <processor-chain>
+                <set-payload value="  " doc:name="Set Payload"/>
+                <file:outbound-endpoint path="C:\pandora\import" outputPattern="TEST_VOYA_trigger.xml" connector-ref="File" responseTimeout="10000" doc:name="File"/>
+                <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+            </processor-chain>
+        </first-successful>
+    </flow>
+</mule>
