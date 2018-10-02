@@ -14,23 +14,23 @@ http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/m
     <db:generic-config name="Generic_Database_Configuration" url="jdbc:postgresql://localhost:5432/test?user=postgres&amp;password=postgres" driverClassName="org.postgresql.Driver" doc:name="Generic Database Configuration"/>
     <file:connector name="File" autoDelete="false" streaming="true" validateConnections="true" doc:name="File" outputAppend="true">
     </file:connector>
-    <flow name="testFlow" processingStrategy="synchronous">
+    <flow name="updateAlertsFlow" processingStrategy="synchronous">
         <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="5000"/>
-            <watermark variable="lastRecordId" default-expression="0" selector="MAX" selector-expression="#[payload[&quot;UID&quot;]]" object-store-ref="_defaultUserObjectStore"/>
-            <db:select config-ref="Generic_Database_Configuration" streaming="true" target="#[payload]" maxRows="10" fetchSize="10" doc:name="Database">
+            <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS"/>
+            <watermark variable="lastRecordId" default-expression="0" selector="MAX" selector-expression="#[payload[&quot;UID&quot;]]"/>
+            <db:select config-ref="Generic_Database_Configuration"  target="#[payload]" maxRows="10" fetchSize="10" doc:name="Database">
                 <db:dynamic-query><![CDATA[select * from "ALERTS" 
 where "UID" > #[flowVars['lastRecordId']] 
 order by "UID" asc]]></db:dynamic-query>
             </db:select>
         </poll>
         <choice doc:name="Choice">
-            <when expression="">
+            <when expression="#[payload.isEmpty() == false]">
                 <set-payload value="  " doc:name="Set Payload"/>
                 <file:outbound-endpoint path="C:\pandora\import" outputPattern="TEST_VOYA_trigger.xml" connector-ref="File" responseTimeout="10000" doc:name="File"/>
             </when>
             <otherwise>
-                <logger level="INFO" doc:name="Logger"/>
+                <logger level="INFO" doc:name="Logger" message="&quot;SECOND LOGGER&quot; #[payload]"/>
             </otherwise>
         </choice>
     </flow>
