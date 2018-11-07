@@ -1,0 +1,121 @@
+{
+	"type": "object",
+	"properties": {
+		"communityName": {
+			"type": "string"
+		},
+		"externalSystemId": {
+			"type": "string"
+		},
+		"results": {
+			"type": "array",
+			"items": {
+				"type": "object",
+				"properties": {
+					"externalEntityId": {
+						"type": "string"
+					},
+					"name": {
+						"type": "string"
+					},
+					"description": {
+						"type": "string"
+					},
+					"note": {
+						"type": "string"
+					},
+					"dimension": {
+						"type": "string"
+					},
+					"evaluatedColumns": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"databaseName": {
+									"type": "string"
+								},
+								"schemaName": {
+									"type": "string"
+								},
+								"tableName": {
+									"type": "string"
+								},
+								"name": {
+									"type": "string"
+								}
+							},
+							"required": [
+								"databaseName",
+								"schemaName",
+								"tableName",
+								"name"
+							],
+							"additionalProperties": false
+						}
+					},
+					"rowsPassed": {
+						"type": "integer"
+					},
+					"rowsFailed": {
+						"type": "integer"
+					},
+					"qualityScore": {
+						"type": "number",
+						"minimum": 0,
+						"maximum": 100
+					},
+					"result": {
+						"type": "boolean"
+					},
+					"threshold": {
+						"type": "number",
+						"minimum": 0,
+						"maximum": 100
+					},
+					"customAttributes": {
+						"type": "array",
+						"items": {
+							"type": "object",
+							"properties": {
+								"typeId": {
+									"type": "string"
+								},
+								"values": {
+									"type": "array",
+									"items": {
+										"type": "string"
+									}
+								}
+							},
+							"required": [
+								"typeId",
+								"values"
+							],
+							"additionalProperties": false
+						}
+					}
+				},
+				"required": [
+					"externalEntityId",
+					"name",
+					"rowsPassed",
+					"rowsFailed",
+					"qualityScore"
+				],
+				"anyOf": [{
+					"required": ["result"]
+				}, {
+					"required": ["threshold"]
+				}],
+				"additionalProperties": false
+			}
+		}
+	},
+	"required": [
+		"communityName",
+		"externalSystemId",
+		"results"
+	],
+	"additionalProperties": false
+}

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:collibra-dgc="http://www.mulesoft.org/schema/mule/collibra-dgc" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:collibra-dgc="http://www.mulesoft.org/schema/mule/collibra-dgc" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
@@ -9,16 +9,17 @@ http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/cu
 http://www.mulesoft.org/schema/mule/collibra-dgc http://www.mulesoft.org/schema/mule/collibra-dgc/current/mule-collibra-dgc.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
 http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
-http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
     <collibra-dgc:config name="CollibraDGC__Connection_Managament_type_strategy" username="Admin" password="Password123" baseApplicationUrl="https://experian-dev-54.collibra.com" doc:name="CollibraDGC: Connection Managament type strategy"/>
     <db:generic-config name="Generic_Database_Configuration" url="jdbc:postgresql://localhost:5432/test?user=postgres&amp;password=postgres" driverClassName="org.postgresql.Driver" doc:name="Generic Database Configuration"/>
     <file:connector name="File" autoDelete="false" streaming="true" validateConnections="true" doc:name="File" outputAppend="true">
     </file:connector>
-    <flow name="updateAlertsFlow" processingStrategy="synchronous">
+    <flow name="sendPandoraAlertsFlow" processingStrategy="synchronous">
         <poll doc:name="Poll">
             <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS"/>
             <watermark variable="lastRecordId" default-expression="0" selector="MAX" selector-expression="#[payload[&quot;UID&quot;]]"/>
-            <db:select config-ref="Generic_Database_Configuration"  target="#[payload]" maxRows="10" fetchSize="10" doc:name="Database">
+            <db:select config-ref="Generic_Database_Configuration"  target="#[payload]" maxRows="10" fetchSize="10" doc:name="Alerts Database">
                 <db:dynamic-query><![CDATA[select * from "ALERTS" 
 where "UID" > #[flowVars['lastRecordId']] 
 order by "UID" asc]]></db:dynamic-query>
@@ -30,8 +31,52 @@ order by "UID" asc]]></db:dynamic-query>
                 <file:outbound-endpoint path="C:\pandora\import" outputPattern="TEST_VOYA_trigger.xml" connector-ref="File" responseTimeout="10000" doc:name="File"/>
             </when>
             <otherwise>
-                <logger level="INFO" doc:name="Logger" message="&quot;SECOND LOGGER&quot; #[payload]"/>
+                <logger level="INFO" doc:name="Logger" />
             </otherwise>
         </choice>
+    </flow>
+    <flow name="updateRulesFlow" processingStrategy="synchronous">
+        <poll doc:name="Poll">
+            <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS"/>
+            <watermark variable="lastValidatedTime" default-expression="1970-01-01" selector="MAX" selector-expression="#[payload[&quot;Last Validated&quot;]]"/>
+            <db:select config-ref="Generic_Database_Configuration" target="#[payload]" maxRows="10" fetchSize="10" doc:name="Rules Database">
+                <db:dynamic-query><![CDATA[select * from "PROFILES"
+order by "Last Validated" asc]]></db:dynamic-query>
+            </db:select>
+        </poll>
+        <foreach counterVariableName="ruleIndex" rootMessageVariableName="rules" doc:name="For Each">
+            <dw:transform-message doc:name="Transform Message">
+                <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+ "externalSystemId": "Pandora 5.9.3",
+ "communityName": "MyCommunity",
+ "results": [{
+	 "externalEntityId": payload["External Database"] ++ "." ++ payload["External Schema"] ++ "." ++ payload["External Table Name"],
+	 "name": payload.Name,
+	 "description": payload.Description,
+	 "note": payload.Function,
+	 "dimension": "Completeness",
+	 "evaluatedColumns": [{
+		 "databaseName": payload["External Database"],
+		 "schemaName": payload["External Schema"],
+		 "tableName": payload["External Table Name"],
+		 "name": payload["External Column Name"]
+ 	 }],
+ "rowsPassed": payload["Rows Passed"],
+ "rowsFailed": payload["Rows Failed"],
+ "qualityScore": payload.Score,
+ "result": "true" unless payload["Result"] == "Green" otherwise "false",
+ "threshold": payload.Threshold,
+ "customAttributes": [{
+	 "typeId": "00000000-0000-0000-0000-000000000216",
+	 "values": ["The root cause analysis of the quality score below threshold"]
+  }]	
+ }]
+}]]></dw:set-payload>
+            </dw:transform-message>
+            <logger  level="INFO" doc:name="Logger"/>
+        </foreach>
     </flow>
 </mule>

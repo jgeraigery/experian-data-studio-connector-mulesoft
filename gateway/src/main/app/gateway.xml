@@ -7,11 +7,11 @@
 	xmlns:tls="http://www.mulesoft.org/schema/mule/tls" xmlns:http="http://www.mulesoft.org/schema/mule/http"
 	xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns="http://www.mulesoft.org/schema/mule/core"
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:spring="http://www.springframework.org/schema/beans" version="EE-3.6.1"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mule-ss="http://www.mulesoft.org/schema/mule/spring-security"
 	xmlns:ss="http://www.springframework.org/schema/security"
-	xsi:schemaLocation="
-http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+	xsi:schemaLocation="http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
@@ -38,13 +38,13 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 		</ss:authentication-manager>
 	</spring:beans>
 
-	<mule-ss:security-manager>
+	<mule-ss:security-manager doc:name="Spring Security Provider" name="test">
 		<mule-ss:delegate-security-provider
 			name="memory-provider" delegate-ref="authenticationManager" />
 	</mule-ss:security-manager>
 
 	<http:listener-config name="HTTP_Listener_Configuration"
-		host="0.0.0.0" port="8081" doc:name="HTTP Listener Configuration" />
+		host="0.0.0.0" port="8083" doc:name="HTTP Listener Configuration" />
 	<collibra-dgc:config name="CollibraDGC" username="${dgc.config.user}"
 		password="${dgc.config.password}" baseApplicationUrl="${dgc.config.baseApplicationUrl}"
 		doc:name="CollibraDGC" />
@@ -65,7 +65,7 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 		<http:basic-security-filter realm="mule-realm" />
         <logger message="Authenticated" level="DEBUG" doc:name="Authenticated"/>
         <set-variable variableName="stashed-payload" value="#[payload]" doc:name="stashed-payload"/>
-        <collibra-dgc:login config-ref="CollibraDGC" doc:name="Login"/>
+
         <set-payload value="#[flowVars.'stashed-payload']" doc:name="reverse-payload"/>
 		<choice doc:name="Is 'flowId' present? (YES/NO)">
 			<when expression="#[payload.flowId != null]">
@@ -87,7 +87,7 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 		<set-payload value="#[payload.payload]" doc:name="Set to 'Payload' from message" />
 		<vm:outbound-endpoint exchange-pattern="request-response"
 			path="#[flowVars.flowToInvoke]" doc:name="Start process"
-			connector-ref="shared_vm_connector" />
+			connector-ref="domain-shared-vm-connector" />
 		<choice doc:name="Was successful? (NO/YES)">
 			<when expression="#[!(&quot;200&quot; == payload.status)]">
 				<set-variable variableName="responseReasonPhrase"
@@ -146,7 +146,7 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
 	</flow>
 	<flow name="End_Process" processingStrategy="synchronous">
 		<vm:inbound-endpoint exchange-pattern="request-response"
-			path="gateway_end_process" connector-ref="shared_vm_connector"
+			path="gateway_end_process" connector-ref="domain-shared-vm-connector"
 			doc:name="End the process" />
 		<choice doc:name="Should send response event to the workflow? (YES/NO)">
 			<when

@@ -1,0 +1,67 @@
+{
+	"TableViewConfig": {
+		"displayLength": -1,
+		"displayStart": 0,
+		"Default": {
+			"Operations": {
+				"Term": ["UPDATE", "ADD"],
+				"Attribute": ["REPLACE"],
+				"Relation": ["REPLACE"],
+				"Vocabulary": ["ADD", "UPDATE"]
+			}
+		},
+		"Resources": {
+			"Term": {
+				"Signifier": {
+					"name": "AssetName"
+				},
+				"ConceptType": {
+					"Id": {
+						"name": "AssetTypeId"
+					}
+				},
+				"Vocabulary": {
+					"Name": {
+						"name": "DomainName"
+					},
+					"VocabularyType": {
+						"Id": {
+							"name": "DomainTypeId"
+						}
+					},
+					"Community": {
+						"Name": {
+							"name": "CommunityName"
+						}
+					}
+				}
+			}
+		},
+		"Columns": [{
+			"Column": {
+				"fieldName": "AssetName",
+				"index": "0"
+			}
+		}, {
+			"Column": {
+				"fieldName": "AssetTypeId",
+				"index": "1"
+			}
+		}, {
+			"Column": {
+				"fieldName": "DomainName",
+				"index": "2"
+			}
+		}, {
+			"Column": {
+				"fieldName": "DomainTypeId",
+				"index": "3"
+			}
+		}, {
+			"Column": {
+				"fieldName": "CommunityName",
+				"index": "4"
+			}
+		}]
+	}
+}

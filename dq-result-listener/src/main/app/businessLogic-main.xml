@@ -1,0 +1,625 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:batch="http://www.mulesoft.org/schema/mule/batch" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:collibra-dgc="http://www.mulesoft.org/schema/mule/collibra-dgc" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:spring="http://www.springframework.org/schema/beans" xmlns:core="http://www.mulesoft.org/schema/mule/core" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/collibra-dgc http://www.mulesoft.org/schema/mule/collibra-dgc/current/mule-collibra-dgc.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/batch http://www.mulesoft.org/schema/mule/batch/current/mule-batch.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
+    <sub-flow name="DGC_Logout">
+        <collibra-dgc:logout config-ref="CollibraDGC__Connection_Managament_type_strategy" doc:name="CollibraDGC"/>
+    </sub-flow>
+    <sub-flow name="DGC_Login">
+        <enricher doc:name="Message Enricher" target="#[sessionVars.dgcSessionId]">
+            <collibra-dgc:login config-ref="CollibraDGC__Connection_Managament_type_strategy" doc:name="CollibraDGC"/>
+        </enricher>
+        <logger message="logged in with session id: #[sessionVars.dgcSessionId]" level="INFO" doc:name="Logger"/>
+    </sub-flow>
+    
+    <flow name="main" processingStrategy="synchronous">
+        <logger message="PAYLOAD ====================================== #[payload]" level="INFO" doc:name="Logger"/>
+
+
+        <flow-ref name="validateAndParse" doc:name="validate And Parse"/>
+        <set-variable variableName="projects" value="#[payload.projects]" doc:name="Set 'projects'"/>
+        <set-variable variableName="results" value="#[payload.results]" doc:name="Set 'results'"/>
+        <set-variable variableName="rules" value="#[payload.rules]" doc:name="Set 'rules'"/>
+        <set-variable variableName="ruleFamilies" value="#[payload.ruleFamilies]" doc:name="Set 'rulefamilies'"/>
+        <set-variable variableName="externalSystemId" value="#[payload.externalSystemId]" doc:name="Set 'externalSystemId'"/>
+        <set-variable variableName="communityName" value="#[generateCommunityName(flowVars.externalSystemId)]" doc:name="Set 'communityName'"/>
+        <flow-ref name="DGC_Login" doc:name="DGC_Login"/>
+        <flow-ref name="synchronizeResults" doc:name="Synchronize Results"/>
+        <flow-ref name="DGC_Logout" doc:name="DGC_Logout"/>
+
+        <logger message="=== Synchronization Finished ===" level="INFO" doc:name="Success"/>
+        <expression-component doc:name="Set response to 'Success'"><![CDATA[payload = ["status": "200"];
+payload.title = "Success";
+payload.content = "Synchronization Finished Successfuly"]]></expression-component>
+        <catch-exception-strategy doc:name="Catch_Exception_Strategy">
+            <expression-component doc:name="Set response to 'Failure'"><![CDATA[payload = ["status": "500"];
+payload.title = com.google.common.base.Throwables.getRootCause(exception).getMessage();
+payload.content = com.google.common.base.Throwables.getStackTraceAsString(exception);]]></expression-component>
+            <logger message="=== Synchronization aborted due to exceptions in the flow ===" level="INFO" doc:name="Failure"/>
+            <flow-ref name="DGC_Logout" doc:name="DGC_Logout"/>
+        </catch-exception-strategy>
+    </flow>
+    <sub-flow name="validateAndParse">
+
+        <json:json-to-object-transformer returnClass="com.collibra.connect.template.dgcdqresultconsumer.Results" doc:name="JSON to Results"/>
+
+    </sub-flow>
+    <sub-flow name="synchronizeResults">
+        <enricher target="#[flowVars.withEvaluatedColumns]" doc:name="Enrich with 'withEvaluatedColumns'">
+            <scripting:component doc:name="Filter results with evaluated columns">
+                <scripting:script engine="Groovy"><![CDATA[payload = flowVars.rules.findAll{ !it.evaluatedColumns.isEmpty() };
+return payload;]]></scripting:script>
+            </scripting:component>
+        </enricher>
+        <choice doc:name="Any results with evaluated columns? (YES/NO)">
+            <when expression="#[!flowVars.withEvaluatedColumns.isEmpty()]">
+                <flow-ref name="upsertHosts" doc:name="Upsert Hosts"/>
+                <flow-ref name="upsertDatabase" doc:name="Upsert Databases"/>
+                <flow-ref name="upsertSchemas" doc:name="Upsert Schemas"/>
+                <flow-ref name="upsertTables" doc:name="Upsert Tables"/>
+                <flow-ref name="upsertViews" doc:name="Upsert Views"/>
+                <flow-ref name="upsertColumns" doc:name="Upsert Columns"/>
+
+            </when>
+            <otherwise>
+                <logger message="No results with evaluatedColumns" level="INFO" doc:name="No nothing"/>
+            </otherwise>
+        </choice>
+        <flow-ref name="upsertDomainsAndProjects" doc:name="Upsert Domains And Projects"/>
+        <flow-ref name="upsertDomainsAndDQRules" doc:name="Upsert Domains And DQ Rules"/>
+        <flow-ref name="upsertDomainsAndRuleFamily" doc:name="Upsert Domains And Rule Family"/>
+        <flow-ref name="upsertDomainsAndDQMetric" doc:name="Upsert Domains And DQ Metric"/>
+
+
+    </sub-flow>
+    <sub-flow name="upsertHosts">
+        <set-payload value="#[flowVars.withEvaluatedColumns]" doc:name="Set Payload"/>
+        <logger message="Upserting hosts: #[payload]" level="INFO" doc:name="Upserting"/>
+        <enricher target="#[flowVars.tableViewConfig]" doc:name="Message Enricher">
+            <parse-template location="upsertHosts.json" doc:name="Parse Config"/>
+        </enricher>
+        <dw:transform-message doc:name="Rules2 Host CSV" metadata:id="2465f113-7318-49a0-b4db-38c9b0bb3de1">
+            <dw:input-payload mimeType="application/java"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/csv header=false,separator=",",escape="\\",quote="\""
+---
+(flatten payload.evaluatedColumns) filter ($.hostName != "" and $.hostName != null) map ((column , index) -> {
+	column_0: column.hostName,
+	column_1: "${technologyAssetTypeName}",
+	column_2: "${technologyAssetDomainName}",
+	column_3: "${technologyAssetDomainTypeName}",
+	column_4: flowVars.communityName
+})
+
+]]></dw:set-payload>
+    </dw:transform-message>
+
+    <object-to-string-transformer doc:name="Object to String"/>
+        <logger message="hosts: #[payload]" level="INFO" doc:name="Logger"/>
+        <choice doc:name="Choice">
+            <when expression="#[payload.isEmpty()]">
+                <logger message="No Hosts to Upsert" level="INFO" doc:name="Logger"/>
+            </when>
+            <otherwise>
+                <collibra-dgc:import-c-s-v config-ref="CollibraDGC__Connection_Managament_type_strategy" tableViewConfig="#[flowVars.tableViewConfig]" doc:name="Import Hosts"/>
+            </otherwise>
+        </choice>
+
+
+</sub-flow>
+    <sub-flow name="upsertDatabase">
+        <set-payload value="#[flowVars.withEvaluatedColumns]" doc:name="Apply results with evaluatedColumns"/>
+        <set-variable variableName="HostToDatabaseRelationId" value="${technologyAssetToTechnologyAssetTypeId}" doc:name="HostToDatabaseRelationId"/>
+        <logger message="Upserting databases" level="INFO" doc:name="Upserting"/>
+        <enricher target="#[flowVars.tableViewConfig]" doc:name="Message Enricher">
+            <parse-template location="upsertSchemasAndDomainsAndCommunitiesByName.json" doc:name="Parse config"/>
+        </enricher>
+        <dw:transform-message metadata:id="30c8a303-df98-4ecc-a830-6a5e9033531d" doc:name="Rules 2 Database CSV">
+            <dw:input-payload doc:sample="list_Result_1.dwl" mimeType="application/java"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/csv header=false,separator=",",escape="\\",quote="\""
+---
+ ((flatten payload.evaluatedColumns) filter ($.databaseName != "" and $.databaseName != null) map ((column , index) -> {
+	column_0: generateDatabaseName(column),
+	column_1: "${databaseAssetTypeName}",
+	column_2: "${technologyAssetDomainName}",
+	column_3: "${technologyAssetDomainTypeName}",
+	column_4: flowVars.communityName,
+	column_5: generateHostName(column),
+	column_6: "${technologyAssetTypeName}",
+	column_7: "${technologyAssetDomainName}",
+	column_8: "${technologyAssetDomainTypeName}",
+	column_9: flowVars.communityName
+}))
+
+]]></dw:set-payload>
+    </dw:transform-message>
+    <object-to-string-transformer doc:name="Object to String"/>
+        <choice doc:name="Choice">
+            <when expression="#[payload.isEmpty()]">
+                <logger message="No Databases to Import" level="INFO" doc:name="Logger"/>
+            </when>
+            <otherwise>
+                <collibra-dgc:import-c-s-v config-ref="CollibraDGC__Connection_Managament_type_strategy" tableViewConfig="#[flowVars.tableViewConfig]" doc:name="Import Databases "/>
+            </otherwise>
+        </choice>
+
+</sub-flow>
+    <sub-flow name="upsertSchemas">
+        <set-payload value="#[flowVars.withEvaluatedColumns]" doc:name="Apply results with evaluatedColumns"/>
+        <set-variable variableName="DatabaseToSchemaRelationId" value="${dataAssetToTechnologyAssetTypeId}" doc:name="DatabaseToSchemaRelationId"/>
+        <logger message="Upserting  schemas" level="INFO" doc:name="Upserting"/>
+        <enricher target="#[flowVars.tableViewConfig]" doc:name="Message Enricher">
+            <parse-template location="UpsertSchemas.json" doc:name="Parse config"/>
+        </enricher>
+        <dw:transform-message metadata:id="30c8a303-df98-4ecc-a830-6a5e9033531d" doc:name="Rules 2 Schema CSV">
+            <dw:input-payload doc:sample="list_Result_1.dwl" mimeType="application/java"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/csv header=false,separator=",",escape="\\",quote="\""
+---
+(flatten payload.evaluatedColumns) filter ($.schemaName != "" and $.schemaName != null) map ((column , index) -> {
+	column_0: generateSchemaName(column),
+	column_1: "${schemaAssetTypeName}",
+	column_2: "${physicalDataDictionaryDomainName}",
+	column_3: "${physicalDataDictionaryTypeName}",
+	column_4: flowVars.communityName,
+	column_5: generateDatabaseName(column),
+	column_6: "${databaseAssetTypeName}",
+	column_7: "${technologyAssetDomainName}",
+	column_8: "${technologyAssetDomainTypeName}",
+	column_9: flowVars.communityName
+})
+
+]]></dw:set-payload>
+    </dw:transform-message>
+    <object-to-string-transformer doc:name="Object to String"/>
+        <choice doc:name="Choice">
+            <when expression="#[payload.isEmpty()]">
+                <logger message="No Schemas to Import" level="INFO" doc:name="Logger"/>
+            </when>
+            <otherwise>
+                <collibra-dgc:import-c-s-v config-ref="CollibraDGC__Connection_Managament_type_strategy" tableViewConfig="#[flowVars.tableViewConfig]" doc:name="CollibraDGC"/>
+            </otherwise>
+        </choice>
+
+</sub-flow>
+
+    <sub-flow name="upsertTables">
+        <set-payload value="#[flowVars.withEvaluatedColumns]" doc:name="Apply results with evaluatedColumns"/>
+        <set-variable variableName="SchemaToTableRelationId" value="${schemaToTableTypeId}" doc:name="SchemaToTableRelationId"/>
+        <logger message="Upserting tables" level="INFO" doc:name="Upserting"/>
+        <enricher target="#[flowVars.tableViewConfig]" doc:name="Message Enricher">
+            <parse-template location="upsertTablesWithRelationToDatabases.json" doc:name="Parse config"/>
+        </enricher>
+        <dw:transform-message metadata:id="56d6a305-6c6e-4d3f-8f21-bb6c1dc79adc" doc:name="Rules 2 Table CSV">
+            <dw:input-payload doc:sample="list_Result_2.dwl" mimeType="application/java"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/csv header=false,separator=",",escape="\\",quote="\""
+---
+(flatten payload.evaluatedColumns) filter ($.tableName !="" and $.tableName != null) map ((column , index) -> {
+	column_0: generateTableName(column),
+	column_1: "${tableAssetTypeName}",
+	column_2: "${physicalDataDictionaryDomainName}",
+	column_8: "${physicalDataDictionaryTypeName}",
+	column_3: flowVars.communityName,
+	column_4: generateSchemaName(column),
+	column_5: "${schemaAssetTypeName}",
+	column_6: "${physicalDataDictionaryDomainName}",
+	column_9: "${physicalDataDictionaryTypeName}",
+	column_7: flowVars.communityName
+
+})]]></dw:set-payload>
+    </dw:transform-message>
+    <object-to-string-transformer doc:name="Object to String"/>
+        <choice doc:name="Choice">
+            <when expression="#[payload.isEmpty()]">
+                <logger message="No Tables to Import" level="INFO" doc:name="Logger"/>
+            </when>
+            <otherwise>
+                <collibra-dgc:import-c-s-v config-ref="CollibraDGC__Connection_Managament_type_strategy" tableViewConfig="#[flowVars.tableViewConfig]" doc:name="Import Tables"/>
+            </otherwise>
+        </choice>
+
+</sub-flow>
+    <sub-flow name="upsertViews">
+        <set-payload value="#[flowVars.withEvaluatedColumns]" doc:name="Set Payload"/>
+        <set-variable variableName="SchemaToViewRelationId" value="${schemaToViewTypeId}" doc:name="SchemaToViewRelationId"/>
+        <logger level="INFO" doc:name="Upserting" message="Upserting Views"/>
+        <enricher doc:name="Message Enricher" target="#[flowVars.tableViewConfig]">
+            <parse-template location="upsertViews.json" doc:name="Parse config"/>
+        </enricher>
+
+        <dw:transform-message doc:name="Rules 2 View CSV" metadata:id="83b3d756-94bf-4e2b-82b1-62f085a2b8c8">
+            <dw:input-payload mimeType="application/java"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/csv header=false,separator=",",escape="\\",quote="\""
+---
+(flatten payload.evaluatedColumns) filter ($.viewName !="" and $.viewName != null) map ((column , index) -> {
+	column_0: generateViewName(column),
+	column_1: "${viewAssetTypeName}",
+	column_2: "${physicalDataDictionaryDomainName}",
+	column_8: "${physicalDataDictionaryTypeName}",
+	column_3: flowVars.communityName,
+	column_4: generateSchemaName(column),
+	column_5: "${schemaAssetTypeName}",
+	column_6: "${physicalDataDictionaryDomainName}",
+	column_9: "${physicalDataDictionaryTypeName}",
+	column_7: flowVars.communityName
+
+})]]></dw:set-payload>
+    </dw:transform-message>
+        <object-to-string-transformer doc:name="Object to String"/>
+
+        <choice doc:name="Choice">
+            <when expression="#[payload.isEmpty()]">
+                <logger message="No Views to import" level="INFO" doc:name="Logger"/>
+            </when>
+            <otherwise>
+                <collibra-dgc:import-c-s-v config-ref="CollibraDGC__Connection_Managament_type_strategy" tableViewConfig="#[flowVars.tableViewConfig]" doc:name="Import Views"/>
+            </otherwise>
+        </choice>
+
+</sub-flow>
+
+    <sub-flow name="upsertColumns">
+        <set-payload value="#[flowVars.withEvaluatedColumns]" doc:name="Apply results with evaluatedColumns"/>
+        <set-variable variableName="TableToColumnRelationId" value="${columnToTableTypeId}" doc:name="TableToColumnRelationId"/>
+        <logger message="Upserting columns" level="INFO" doc:name="Upserting"/>
+        <enricher target="#[flowVars.tableViewConfig]" doc:name="Message Enricher">
+            <parse-template location="upsertColumnsWithRelationToTables.json" doc:name="Parse config"/>
+        </enricher>
+        <dw:transform-message metadata:id="56d6a305-6c6e-4d3f-8f21-bb6c1dc79adc" doc:name="Result 2 Column CSV">
+            <dw:input-payload mimeType="application/java" doc:sample="list_Result_3.dwl"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/csv header=false,separator=",",escape="\\",quote="\""
+---
+(flatten payload.evaluatedColumns) filter ($.hostName != "" and $.hostName != null) map ((column , index) -> {
+	column_0: generateColumnName(column),
+	column_1: "${columnAssetTypeId}",
+	column_2: "${physicalDataDictionaryDomainName}",
+	column_3: flowVars.communityName,
+	column_4: (generateTableName(column)) when column.tableName != "" otherwise ((generateViewName(column))),
+	column_5: "${physicalDataDictionaryDomainName}"
+})]]></dw:set-payload>
+        </dw:transform-message>
+        <object-to-string-transformer doc:name="Object to String"/>
+        <logger message="column: #[payload]" level="INFO" doc:name="Logger"/>
+        <choice doc:name="Choice">
+            <when expression="#[payload.isEmpty()]">
+                <logger level="INFO" doc:name="Logger"/>
+            </when>
+            <otherwise>
+                <collibra-dgc:import-c-s-v config-ref="CollibraDGC__Connection_Managament_type_strategy" tableViewConfig="#[flowVars.tableViewConfig]" doc:name="Import Columns"/>
+            </otherwise>
+        </choice>
+
+    </sub-flow>
+    <sub-flow name="upsertDomains">
+        <logger message="Upserting domains for DQ Results" level="INFO" doc:name="Upserting"/>
+        <enricher target="#[flowVars.tableViewConfig]" doc:name="Message Enricher">
+            <parse-template location="upsertDomains.json" doc:name="Parse config"/>
+        </enricher>
+        <dw:transform-message metadata:id="56d6a305-6c6e-4d3f-8f21-bb6c1dc79adc" doc:name="Result 2 Domain CSV">
+            <dw:input-payload mimeType="application/java" doc:sample="sample_data\Result_1.dwl"/>
+            <dw:input-variable doc:sample="sample_data\string.dwl" variableName="communityName"/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/csv header=false,separator=",",escape="\\",quote="\""
+---
+payload map ((result , index) -> {
+	column_0: generateDomainNameForDataQualityResults(),
+	column_1: p('ruleBookDomainTypeId'),
+	column_2: flowVars.communityName
+})]]></dw:set-payload>
+    </dw:transform-message>
+    <object-to-string-transformer doc:name="Object to String"/>
+        <choice doc:name="Choice">
+            <when expression="#[payload.isEmpty()]">
+                <logger message="No Domains to Upsert" level="INFO" doc:name="Logger"/>
+            </when>
+            <otherwise>
+                <collibra-dgc:import-c-s-v config-ref="CollibraDGC__Connection_Managament_type_strategy" tableViewConfig="#[flowVars.tableViewConfig]" doc:name="Import Domains for DQ Rules"/>
+            </otherwise>
+        </choice>
+
+</sub-flow>
+    <sub-flow name="upsertDomainsAndProjects">
+        <set-payload value="#[flowVars.projects]" doc:name="Apply 'projects'"/>
+        <flow-ref name="upsertDomains" doc:name="upsertDomains"/>
+        <logger message="Upserting Projects" level="INFO" doc:name="Upserting"/>
+        <set-payload value="#[flowVars.projects]" doc:name="Apply 'projects'"/>
+        <logger message="payload before project transform: #[payload]" level="INFO" doc:name="Logger"/>
+        <dw:transform-message doc:name="Result 2 Project">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload map ((result , index) -> {
+	name: result.name,
+	domain: {
+		name: generateDomainNameForDataQualityResults(),
+		domainType: {
+			id: "${ruleBookDomainTypeId}"
+		},
+		community: {
+			name: flowVars.communityName
+		}
+	},
+	"${descriptionAttributeTypeId}": [{
+		value: result.description
+	}]
+})]]></dw:set-payload>
+        </dw:transform-message>
+        <logger message="payload before project upsert: #[payload]" level="INFO" doc:name="Logger"/>
+        <collibra-dgc:upsert-assets-by-name config-ref="CollibraDGC__Connection_Managament_type_strategy" assetTypeId="${projectAttributeTypeId}" doc:name="Upsert Projects">
+            <collibra-dgc:assets ref="#[payload]"/>
+        </collibra-dgc:upsert-assets-by-name>
+    </sub-flow>
+    <sub-flow name="upsertDomainsAndDQRules">
+        <set-payload value="#[flowVars.rules]" doc:name="Apply 'rules'"/>
+        <flow-ref name="upsertDomains" doc:name="upsertDomains"/>
+
+        <logger message="Upserting DQ Rule" level="INFO" doc:name="Upserting"/>
+        <set-payload value="#[flowVars.rules]" doc:name="Apply 'rules'"/>
+        <logger message="payload before dq rule transform: #[payload]" level="INFO" doc:name="Logger"/>
+
+        <dw:transform-message metadata:id="56d6a305-6c6e-4d3f-8f21-bb6c1dc79adc" doc:name="Result 2 Data Quality Rule">
+            <dw:input-payload/>
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload map ((result , index) -> {
+	externalId: result.externalEntityId,
+	name: result.name,
+	domain: {
+		name: generateDomainNameForDataQualityResults(),
+		domainType: {
+			id: "${ruleBookDomainTypeId}"
+		},
+		community: {
+			name: flowVars.communityName
+		}
+	},
+	"${descriptionAttributeTypeId}": [{
+		value: result.description
+	}],
+	"${descriptiveExampleAttributeTypeId}":[{
+		value: result.descriptiveExample
+	}],
+	"${noteAttributeTypeId}": [{
+		value: result.note
+	}],
+	"${locationAttributeTypeId}": [{
+		value: result.url
+	}],
+	"${predicateAttributeTypeId}": [{
+		value: result.predicate
+	}],
+	"${assetToGovernanceAssetTypeId}:TARGET": result.evaluatedColumns filter ($.hostName != null and $.hostName != "") map ((column, colIndex) -> ({
+		name: generateColumnName(column),
+		domain: {
+			name: "${physicalDataDictionaryDomainName}",
+			community: {
+				name: flowVars.communityName
+			}
+		}
+	}) ) when ((sizeOf result.evaluatedColumns) != 0) otherwise [],
+	"${dataQualityRuleToRuleFamilyId}:SOURCE": result.rulefamily map ((ruleFamily, colIndex) -> {
+		name: ruleFamily.name,
+		domain: {
+			name: generateDomainNameForDataQualityResults(),
+			community: {
+				name: flowVars.communityName
+			}
+		}
+	}),"${businessDimensionToAssetTypeId_P2DR}:TARGET": ([{
+		name: result.parentName,
+		domain: {
+			name: generateDomainNameForDataQualityResults(),
+			community: {
+				name: flowVars.communityName
+			}
+		}
+	}]) when (result.parentName != null and result.parentName != "") otherwise [],
+	(result.customAttributes map ((key,index) -> 
+		'$(key.typeId)' : key.values map {
+		value: $
+	})	
+	)
+})]]></dw:set-payload>
+        </dw:transform-message>
+        <logger message="payload before dq rule upsert: #[payload]" level="INFO" doc:name="Logger"/>
+
+        <collibra-dgc:upsert-assets-by-name config-ref="CollibraDGC__Connection_Managament_type_strategy" assetTypeId="${dataQualityRuleAttributeTypeId}" doc:name="Upsert DQ Rules with/without relation to the evaluated Column">
+            <collibra-dgc:assets ref="#[payload]"/>
+        </collibra-dgc:upsert-assets-by-name>
+    </sub-flow>
+    <sub-flow name="upsertDomainsAndRuleFamily">
+        <set-payload value="#[flowVars.ruleFamilies]" doc:name="Apply 'rulefamilies'"/>
+        <flow-ref name="upsertDomains" doc:name="Upsert Domains"/>
+        <logger message="Upsert rulefamily" level="INFO" doc:name="Upserting"/>
+        <set-payload value="#[flowVars.ruleFamilies]" doc:name="Apply 'rulefamilies'"/>
+
+        <dw:transform-message doc:name="Result 2 Rule Family">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload filter (payload != null and payload != "") map ((result , index) -> {
+	externalId: result.externalEntityId,
+	name: result.name,
+	domain: {
+		name: generateDomainNameForDataQualityResults(),
+		domainType: {
+			id: "${ruleBookDomainTypeId}"
+		},
+		community: {
+			name: flowVars.communityName
+		}
+	},
+	"${descriptionAttributeTypeId}": [{
+		value: result.description
+	}],
+	"${descriptiveExampleAttributeTypeId}": [{
+		value: result.descriptiveExample
+	}],
+	"${noteAttributeTypeId}": [{
+		value: result.note
+	}],
+	"${locationAttributeTypeId}": [{
+		value: result.url
+	}],
+	"${predicateAttributeTypeId}": ([{
+		value: (result.predicate)
+	}]) when (result.predicate != null and result.predicate != "" and result.predicate != "null") otherwise [],
+	"${businessDimensionToAssetTypeId_P2DR}:TARGET": ([{
+		name: result.parentName,
+		domain: {
+			name: generateDomainNameForDataQualityResults(),
+			community: {
+				name: flowVars.communityName
+			}
+		}
+	}]) when (result.parentName != null and result.parentName != "") otherwise [],
+	"${governanceAssetToGovernanceAssetTypeId}:SOURCE": (result.members map ((member, memberIndex) -> ({
+		name: member.name,
+		domain: {
+			name: generateDomainNameForDataQualityResults(),
+			community: {
+				name: flowVars.communityName
+			}
+		}
+	}) when (result.members != "" and result.members != "[]") otherwise [] ))
+})]]></dw:set-payload>
+        </dw:transform-message>
+        <logger message="payload before upserting rule family: #[payload]" level="INFO" doc:name="Logger"/>
+
+        <collibra-dgc:upsert-assets-by-name config-ref="CollibraDGC__Connection_Managament_type_strategy" assetTypeId="${ruleFamilyAttributeTypeId}" doc:name="Upsert Rule Family">
+            <collibra-dgc:assets ref="#[payload]"/>
+        </collibra-dgc:upsert-assets-by-name>
+
+    </sub-flow>
+
+    <sub-flow name="upsertDomainsAndDQMetric">
+        <set-payload value="#[flowVars.results]" doc:name="Apply 'results'"/>
+        <flow-ref name="upsertDomains" doc:name="upsertDomains"/>
+        <logger message="upserting DQ Metric" level="INFO" doc:name="Upserting"/>
+        <set-payload value="#[flowVars.results]" doc:name="Apply 'results'"/>
+
+        <dw:transform-message doc:name="Result 2 Data Quality Metric">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload filter (payload != null and payload != "" and $.lastSyncDate != "" and $.lastSyncDate != null) orderBy ($.lastSyncDate) as :date map ((result , index) -> {
+	externalId: result.externalEntityId,
+	name: result.name,
+	domain: {
+		name: p('ruleBookAssetsDomainName'),
+		domainType: {
+			id: p('ruleBookDomainTypeId')
+		},
+		community: {
+			name: flowVars.communityName
+		}
+	},
+	"${descriptionAttributeTypeId}": [{
+		value: result.description
+	}],
+	"${rowsFailedAttributeTypeId}": [{
+		value: (result.rowsFailed as :string) when (result.rowsFailed != "null" and result.rowsFailed != null ) otherwise ""
+	}],
+	"${rowsPassesAttributeTypeId}": [{
+		value: (result.rowsPassed as :string) when (result.rowsPassed != "null" and result.rowsPassed != null) otherwise ""
+	}],
+	"${loadedRowsAttributeTypeId}": [{
+		value: (result.loadedRows as :string) when (result.loadedRows != "null" and result.loadedRows != null) otherwise ""
+	}],
+	"${locationAttributeTypeId}": [{
+		value: result.url
+	}],
+	"${qualityScoreAttributeTypeId}": [{
+		value: (result.qualityScore as :string) when (result.qualityScore != "null" and result.qualityScore != null) otherwise ""
+	}],
+	"${thresholdAttributeTypeId}": [{
+		value: p('thresholdAttributeValue')
+	}],
+	"${lastSyncDateAttributeTypeId}": [{
+		value: (result.lastSyncDate as :date) as :string
+	}],
+	"${resultAttributeTypeId}": [{
+		value: ((true) when (p('thresholdAttributeValue') < result.qualityScore) otherwise false) as :string
+	}],
+	"${dataQualityRuleToDataQualityMetricId}:TARGET": ([{
+		name: result.parentName,
+		domain: {
+			name: p('ruleBookAssetsDomainName'),
+			domainType: {
+				id: p('ruleBookDomainTypeId')
+			},
+			community: {
+				name: flowVars.communityName
+			}
+		}
+	}]) when (result.parentName != "") otherwise []
+}  )  groupBy $.name  ]]></dw:set-payload>
+        </dw:transform-message>
+        <choice doc:name="Choice">
+            <when expression="#[payload.isEmpty()]">
+                <logger message="No Metrics To Upsert" level="INFO" doc:name="Logger"/>
+            </when>
+            <otherwise>
+                <set-variable variableName="DQMetric" value="#[payload]" doc:name="payload 2 DQMetric"/>
+                <set-variable variableName="flag" value="${upsertBylastDate}" doc:name="flag"/>
+                <choice doc:name="Upsert DQ Metric By Latest Execution date?(Yes/No)">
+                    <when expression="#[flowVars.flag == &quot;Yes&quot;]">
+                        <logger message="Process by last sync date" level="INFO" doc:name="Logger"/>
+                        <set-payload value="#[flowVars.DQMetric]" doc:name="Set Payload"/>
+                        <json:object-to-json-transformer doc:name="Object to JSON"/>
+                        <component class="com.collibra.connect.template.dgcdqresultconsumer.UpsertByLastSyncDate" doc:name="Java"/>
+                        <dw:transform-message doc:name="Transform Message">
+                            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+payload]]></dw:set-payload>
+                        </dw:transform-message>
+                        <logger message="payload before metric upsert: #[payload]" level="INFO" doc:name="Logger"/>
+                        <collibra-dgc:upsert-assets-by-name config-ref="CollibraDGC__Connection_Managament_type_strategy" assetTypeId="${dataQualityRuleMetricAttributeTypeId}" doc:name="Upsert DQ Metric">
+                            <collibra-dgc:assets ref="#[payload]"/>
+                        </collibra-dgc:upsert-assets-by-name>
+                    </when>
+                    <otherwise>
+                        <logger message="process by sort order" level="INFO" doc:name="Logger"/>
+                        <set-payload value="#[flowVars.DQMetric]" doc:name="Set Payload"/>
+                        <dw:transform-message doc:name="Transform Message">
+                            <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+flatten payload]]></dw:set-payload>
+                        </dw:transform-message>
+                        <set-variable variableName="metric" value="#[payload]" doc:name="Metric Payload"/>
+                        <foreach collection="#[flowVars.metric]" doc:name="For Each">
+                            <set-variable variableName="aMetric" value="#[new java.util.ArrayList()]" doc:name="aMetric"/>
+                            <expression-transformer expression="#[flowVars.aMetric.add(payload)]" doc:name="Expression"/>
+                            <set-payload value="#[payload]" doc:name="Set Payload"/>
+                            <collibra-dgc:upsert-assets-by-name config-ref="CollibraDGC__Connection_Managament_type_strategy" assetTypeId="${dataQualityRuleMetricAttributeTypeId}" doc:name="Upsert DQ Metric">
+                                <collibra-dgc:assets ref="#[payload]"/>
+                            </collibra-dgc:upsert-assets-by-name>
+                        </foreach>
+                    </otherwise>
+                </choice>
+            </otherwise>
+        </choice>
+
+
+
+
+
+    </sub-flow>
+
+
+</mule>

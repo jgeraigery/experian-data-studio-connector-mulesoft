@@ -1,0 +1,157 @@
+{
+  "TableViewConfig": {
+    "displayLength": -1,
+    "displayStart": 0,
+    "Default": {
+      "Operations": {
+        "Term": [
+          "UPDATE",
+          "ADD"
+        ],
+        "Attribute": [
+          "REPLACE"
+        ],
+        "Relation": [
+          "REPLACE"
+        ],
+        "Vocabulary": [
+          "ADD",
+          "UPDATE"
+        ]
+      }
+    },
+    "Resources": {
+      "Term": {
+        "Signifier": {
+          "name": "Term"
+        },
+        "Id": {
+          "name": "Id"
+        },
+        "ConceptType": {
+          "Signifier": {
+            "name": "Type"
+          },
+          "KeyContent": [
+            "Type"
+          ]
+        },
+        "Vocabulary": {
+          "Name": {
+            "name": "Domain"
+          },
+          "KeyContent": [
+            "Domain"
+          ],
+          "VocabularyType": {
+            "Signifier": {
+              "name": "VocabularyType"
+            },
+            "KeyContent": [
+              "VocabularyType"
+            ]
+          },
+          "Community": {
+            "Name": {
+              "name": "Community"
+            },
+            "KeyContent": [
+              "Community"
+            ]
+          }
+        },
+        "Relation": {
+          "typeId": #[flowVars.SchemaToViewRelationId],
+          "type": "TARGET",
+          "Source": {
+            "Signifier": {
+              "name": "Target50"
+            },
+            "ConceptType": {
+              "Signifier": {
+                "name": "Target51"
+              }
+            },
+            "Vocabulary": {
+              "Name": {
+                "name": "Target52"
+              },
+              "VocabularyType": {
+                "Signifier": {
+                  "name": "Target53"
+                }
+              },
+              "Community": {
+                "Name": {
+                  "name": "Target54"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Columns": [
+      {
+        "Column": {
+          "fieldName": "Term",
+          "index": "0"
+        }
+      },
+      {
+        "Column": {
+          "fieldName": "Type",
+          "index": "1"
+        }
+      },
+      {
+        "Column": {
+          "fieldName": "Domain",
+          "index": "2"
+        }
+      },
+      {
+        "Column": {
+          "fieldName": "VocabularyType",
+          "index": "3"
+        }
+      },
+      {
+        "Column": {
+          "fieldName": "Target50",
+          "index": "5"
+        }
+      },
+      {
+        "Column": {
+          "fieldName": "Target51",
+          "index": "6"
+        }
+      },
+      {
+        "Column": {
+          "fieldName": "Target52",
+          "index": "7"
+        }
+      },
+      {
+        "Column": {
+          "fieldName": "Target53",
+          "index": "8"
+        }
+      },
+      {
+        "Column": {
+          "fieldName": "Target54",
+          "index": "9"
+        }
+      },
+      {
+        "Column": {
+          "fieldName": "Community",
+          "index": "4"
+        }
+      }
+    ]
+  }
+}

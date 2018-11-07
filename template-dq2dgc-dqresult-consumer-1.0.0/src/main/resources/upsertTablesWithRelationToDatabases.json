@@ -1,0 +1,91 @@
+{
+	"TableViewConfig": {
+		"displayLength": -1,
+		"displayStart": 0,
+		"Default": {
+			"Operations": {
+				"Term": ["UPDATE", "ADD"],
+				"Attribute": ["REPLACE"],
+				"Relation": ["REPLACE"],
+				"Vocabulary": ["ADD", "UPDATE"]
+			}
+		},
+		"Resources": {
+			"Term": {
+				"Signifier": {
+					"name": "AssetName"
+				},
+				"ConceptType": {
+					"Id": {
+						"name": "AssetTypeId"
+					}
+				},
+				"Vocabulary": {
+					"Name": {
+						"name": "DomainName"
+					},
+					"Community": {
+						"Name": {
+							"name": "CommunityName"
+						}
+					}
+				},
+				"Relation" : {
+					"typeId" : "00000000-0000-0000-0000-000000007045",
+					"type" : "SOURCE",
+					"Target" : {
+						"Signifier" : {
+							"name" : "RelatedDatabaseAssetName"
+						},
+						"Vocabulary" : {
+							"Name" : {
+								"name" : "RelatedDatabaseDomainName"
+							},
+							"Community" : {
+								"Name" : {
+									"name" : "RelatedDatabaseCommunityName"
+								}
+							}
+						}
+					}
+				}
+			}
+		},
+		"Columns": [{
+			"Column": {
+				"fieldName": "AssetName",
+				"index": "0"
+			}
+		}, {
+			"Column": {
+				"fieldName": "AssetTypeId",
+				"index": "1"
+			}
+		}, {
+			"Column": {
+				"fieldName": "DomainName",
+				"index": "2"
+			}
+		}, {
+			"Column": {
+				"fieldName": "CommunityName",
+				"index": "3"
+			}
+		}, {
+			"Column": {
+				"fieldName": "RelatedDatabaseAssetName",
+				"index": "4"
+			}
+		}, {
+			"Column": {
+				"fieldName": "RelatedDatabaseDomainName",
+				"index": "5"
+			}
+		}, {
+			"Column": {
+				"fieldName": "RelatedDatabaseCommunityName",
+				"index": "3"
+			}
+		}]
+	}
+}

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:data-mapper="http://www.mulesoft.org/schema/mule/ee/data-mapper"
+	xmlns:collibra-dgc="http://www.mulesoft.org/schema/mule/collibra-dgc"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/apikit" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/apikit http://www.mulesoft.org/schema/mule/apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/ee/data-mapper http://www.mulesoft.org/schema/mule/ee/data-mapper/current/mule-data-mapper.xsd
+http://www.mulesoft.org/schema/mule/collibra-dgc http://www.mulesoft.org/schema/mule/collibra-dgc/current/mule-collibra-dgc.xsd">
+	<choice-exception-strategy name="defaultChoiceExceptionStrategy">
+		<catch-exception-strategy when="#[exception.causedBy(java.lang.Exception)]" doc:name="Catch Exception Strategy">
+			<expression-component doc:name="Set response to 'Failure'"><![CDATA[payload = ["status": "500"];
+payload.title = com.google.common.base.Throwables.getRootCause(exception).getMessage();
+payload.content = com.google.common.base.Throwables.getStackTraceAsString(exception);]]></expression-component>
+			<logger
+				message="=== Synchronization aborted due to exceptions in the flow ==="
+				level="INFO" doc:name="Failure" />
+
+
+		</catch-exception-strategy>
+	</choice-exception-strategy>
+</mule>

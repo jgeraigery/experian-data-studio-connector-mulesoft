@@ -6,6 +6,71 @@
       <string>http://www.mulesoft.org/schema/mule/db/select</string>
       <map>
         <entry>
+          <string>select * from &quot;PROFILES&quot;
+where &quot;Last Validated&quot; &gt; #[flowVars[&apos;lastValidatedTime&apos;]] 
+order by &quot;Last Validated&quot; asc</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.common.metadata.DefaultListMetaDataModel">
+                <dataType>LIST</dataType>
+                <metaDataModelPropertiesManager>
+                  <properties/>
+                </metaDataModelPropertiesManager>
+                <model class="org.mule.common.metadata.DefaultDefinedMapMetaDataModel">
+                  <dataType>MAP</dataType>
+                  <metaDataModelPropertiesManager>
+                    <properties/>
+                  </metaDataModelPropertiesManager>
+                  <fields/>
+                </model>
+                <isArray>false</isArray>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+        <entry>
           <string>select * from &quot;ALERTS&quot; where &gt; #[flowVars[&apos;lastRecordId&apos;]] order by no asc</string>
           <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
             <output class="org.mule.common.metadata.DefaultMetaData">
@@ -72,6 +137,135 @@
           <string>select * from &quot;ALERTS&quot; &#xd;
 where &quot;UID&quot; &gt; #[flowVars[&apos;lastRecordId&apos;]] &#xd;
 order by &quot;UID&quot; asc</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.common.metadata.DefaultListMetaDataModel">
+                <dataType>LIST</dataType>
+                <metaDataModelPropertiesManager>
+                  <properties/>
+                </metaDataModelPropertiesManager>
+                <model class="org.mule.common.metadata.DefaultDefinedMapMetaDataModel">
+                  <dataType>MAP</dataType>
+                  <metaDataModelPropertiesManager>
+                    <properties/>
+                  </metaDataModelPropertiesManager>
+                  <fields/>
+                </model>
+                <isArray>false</isArray>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+        <entry>
+          <string>select * from &quot;PROFILES&quot;
+where &quot;Last Validated&quot; &gt; &apos;#[flowVars[&apos;lastValidatedTime&apos;]]&apos;
+order by &quot;Last Validated&quot; asc</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.common.metadata.DefaultListMetaDataModel">
+                <dataType>LIST</dataType>
+                <metaDataModelPropertiesManager>
+                  <properties/>
+                </metaDataModelPropertiesManager>
+                <model class="org.mule.common.metadata.DefaultDefinedMapMetaDataModel">
+                  <dataType>MAP</dataType>
+                  <metaDataModelPropertiesManager>
+                    <properties/>
+                  </metaDataModelPropertiesManager>
+                  <fields/>
+                </model>
+                <isArray>false</isArray>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+        <entry>
+          <string>select * from &quot;PROFILES&quot;
+order by &quot;Last Validated&quot; asc</string>
           <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
             <output class="org.mule.common.metadata.DefaultMetaData">
               <payload class="org.mule.common.metadata.DefaultListMetaDataModel">
@@ -261,6 +455,71 @@ order by &quot;UID&quot; asc</string>
         </entry>
         <entry>
           <string>select * from test.alerts;</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.common.metadata.DefaultListMetaDataModel">
+                <dataType>LIST</dataType>
+                <metaDataModelPropertiesManager>
+                  <properties/>
+                </metaDataModelPropertiesManager>
+                <model class="org.mule.common.metadata.DefaultDefinedMapMetaDataModel">
+                  <dataType>MAP</dataType>
+                  <metaDataModelPropertiesManager>
+                    <properties/>
+                  </metaDataModelPropertiesManager>
+                  <fields/>
+                </model>
+                <isArray>false</isArray>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+        <entry>
+          <string>select * from &quot;PROFILES&quot;
+where &quot;Last Validated&quot;
+order by &quot;Last Validated&quot; asc</string>
           <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
             <output class="org.mule.common.metadata.DefaultMetaData">
               <payload class="org.mule.common.metadata.DefaultListMetaDataModel">
@@ -640,6 +899,71 @@ order by &quot;UID&quot; asc</string>
           </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
         </entry>
         <entry>
+          <string>select * from &quot;PROFILES&quot;
+where &quot;Last Validated&quot; &gt; #[flowVars[&apos;lastValidatedTime&apos;]]
+order by &quot;Last Validated&quot; asc</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.common.metadata.DefaultListMetaDataModel">
+                <dataType>LIST</dataType>
+                <metaDataModelPropertiesManager>
+                  <properties/>
+                </metaDataModelPropertiesManager>
+                <model class="org.mule.common.metadata.DefaultDefinedMapMetaDataModel">
+                  <dataType>MAP</dataType>
+                  <metaDataModelPropertiesManager>
+                    <properties/>
+                  </metaDataModelPropertiesManager>
+                  <fields/>
+                </model>
+                <isArray>false</isArray>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+        <entry>
           <string>SELECT * FROM &quot;ALERTS&quot;;</string>
           <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
             <output class="org.mule.common.metadata.DefaultMetaData">
@@ -704,6 +1028,71 @@ order by &quot;UID&quot; asc</string>
         </entry>
         <entry>
           <string>select * from &quot;ALERTS&quot; where &gt; &quot;UID&quot; #[flowVars[&apos;lastRecordId&apos;]] order by &quot;UID&quot; asc</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.common.metadata.DefaultListMetaDataModel">
+                <dataType>LIST</dataType>
+                <metaDataModelPropertiesManager>
+                  <properties/>
+                </metaDataModelPropertiesManager>
+                <model class="org.mule.common.metadata.DefaultDefinedMapMetaDataModel">
+                  <dataType>MAP</dataType>
+                  <metaDataModelPropertiesManager>
+                    <properties/>
+                  </metaDataModelPropertiesManager>
+                  <fields/>
+                </model>
+                <isArray>false</isArray>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+        <entry>
+          <string>select * from &quot;PROFILES&quot;
+where &quot;Last Validated&quot; &gt; &quot;#[flowVars[&apos;lastValidatedTime&apos;]]&quot;
+order by &quot;Last Validated&quot; asc</string>
           <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
             <output class="org.mule.common.metadata.DefaultMetaData">
               <payload class="org.mule.common.metadata.DefaultListMetaDataModel">
@@ -893,6 +1282,71 @@ order by &quot;UID&quot; asc</string>
         </entry>
         <entry>
           <string>select * from &quot;alerts&quot;;</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.common.metadata.DefaultListMetaDataModel">
+                <dataType>LIST</dataType>
+                <metaDataModelPropertiesManager>
+                  <properties/>
+                </metaDataModelPropertiesManager>
+                <model class="org.mule.common.metadata.DefaultDefinedMapMetaDataModel">
+                  <dataType>MAP</dataType>
+                  <metaDataModelPropertiesManager>
+                    <properties/>
+                  </metaDataModelPropertiesManager>
+                  <fields/>
+                </model>
+                <isArray>false</isArray>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+        <entry>
+          <string>select * from &quot;PROFILES&quot; 
+where &quot;Last Validated&quot; &gt; #[flowVars[&apos;lastValidatedTime&apos;]] 
+order by &quot;Last Validated&quot; asc</string>
           <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
             <output class="org.mule.common.metadata.DefaultMetaData">
               <payload class="org.mule.common.metadata.DefaultListMetaDataModel">

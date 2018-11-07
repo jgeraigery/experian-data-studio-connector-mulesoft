@@ -1,0 +1,24 @@
+{
+	"externalSystemId": "extSystem1",
+	"results": [{
+
+		"externalEntityId": "extId1",
+		"name": "Rule Name1",
+		"dimension": "CONFORMITY",
+
+		"rowsPassed": 123,
+		"rowsFailed": 3123,
+		"qualityScore": 0.95,
+		"result": true,
+		"threshold": 0.55,
+
+		"lastRunDate": 213123123,
+
+		"customAttributes": [{
+				"typeId": "1230120312-123-1-23-12-3",
+				"values": ["1239123"]
+			}
+
+		]
+	}]
+}

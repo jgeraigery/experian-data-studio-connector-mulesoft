@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:collibra-dgc="http://www.mulesoft.org/schema/mule/collibra-dgc"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:spring="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/collibra-dgc http://www.mulesoft.org/schema/mule/collibra-dgc/current/mule-collibra-dgc.xsd
+http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-current.xsd">
+	<context:property-placeholder location="dq2dgc-dqresult-consumer.properties" />
+	<collibra-dgc:config name="CollibraDGC__Connection_Managament_type_strategy"
+		username="${dgc.userName}" password="${dgc.password}"
+		baseApplicationUrl="${dgc.baseApplicationUrl}" doc:name="CollibraDGC: Connection Managament type strategy" />
+	<configuration doc:name="Configuration">
+		<expression-language>
+			<global-functions>
+
+				def generateCommunityName(externalSystemId) {
+				return externalSystemId;
+				}
+
+				def
+				generateDomainNameForDataCatalogAssets(column) {
+				return
+				column.hostName;
+				}
+
+				def generateHostName(column) {
+				return
+				column.hostName ;
+				}
+
+				def generateDatabaseName(column) {
+				return
+				column.hostName + '.' + column.databaseName;
+
+				}
+
+				def
+				generateSchemaName(column) {
+				return column.hostName + '.' +
+				column.databaseName + '.' + column.schemaName;
+				}
+
+				def
+				generateTableName(column) {
+				return column.hostName + '.' +
+				column.databaseName + '.' + column.schemaName + '.' +
+				column.tableName
+				}
+
+				def
+				generateViewName(column) {
+				return column.hostName
+				+ '.' +
+				column.databaseName + '.' + column.schemaName + '.' +
+				column.viewName
+				}
+
+				def generateColumnName(column)
+				{
+				return
+				column.hostName + '.' +column.databaseName + '.' +
+				column.schemaName
+				+ '.' +
+				column.tableName + '.' + column.name
+				}
+
+				def
+				generateDomainNameForDataQualityResults() {
+				return
+				"${ruleBookAssetsDomainName}"
+				}
+
+				def calculateResult(result) {
+				if(result.result != null) {
+				return result.result;
+				}
+				return
+				result.threshold &lt; result.qualityScore;
+				}
+			</global-functions>
+		</expression-language>
+	</configuration>
+</mule>

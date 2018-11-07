@@ -3,6 +3,534 @@
   <connectorName>CollibraDGC__Connection_Managament_type_strategy</connectorName>
   <metadataIo class="tree-map">
     <entry>
+      <string>http://www.mulesoft.org/schema/mule/collibra-dgc/export-c-s-v-as-string</string>
+      <map>
+        <entry>
+          <string>__default__</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.common.metadata.DefaultSimpleMetaDataModel">
+                <dataType>STRING</dataType>
+                <metaDataModelPropertiesManager>
+                  <properties/>
+                </metaDataModelPropertiesManager>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+      </map>
+    </entry>
+    <entry>
+      <string>http://www.mulesoft.org/schema/mule/collibra-dgc/find-mappings</string>
+      <map>
+        <entry>
+          <string>__default__</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <input class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.tooling.metadata.api.TypeRefMetaDataModel">
+                <connectorName>CollibraDGC__Connection_Managament_type_strategy</connectorName>
+                <typeId>com.collibra.connect.dgc.connector.resources.requests.FindMappingsRequest</typeId>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </input>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.common.metadata.DefaultListMetaDataModel">
+                <dataType>LIST</dataType>
+                <metaDataModelPropertiesManager>
+                  <properties/>
+                </metaDataModelPropertiesManager>
+                <model class="org.mule.tooling.metadata.api.TypeRefMetaDataModel">
+                  <connectorName>CollibraDGC__Connection_Managament_type_strategy</connectorName>
+                  <typeId>com.collibra.connect.dgc.connector.model.Mapping</typeId>
+                </model>
+                <isArray>false</isArray>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+      </map>
+    </entry>
+    <entry>
+      <string>http://www.mulesoft.org/schema/mule/collibra-dgc/get-asset</string>
+      <map>
+        <entry>
+          <string>__default__</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.tooling.metadata.api.TypeRefMetaDataModel">
+                <connectorName>CollibraDGC__Connection_Managament_type_strategy</connectorName>
+                <typeId>com.collibra.connect.dgc.connector.model.Asset</typeId>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+      </map>
+    </entry>
+    <entry>
+      <string>http://www.mulesoft.org/schema/mule/collibra-dgc/get-asset-type</string>
+      <map>
+        <entry>
+          <string>__default__</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.tooling.metadata.api.TypeRefMetaDataModel">
+                <connectorName>CollibraDGC__Connection_Managament_type_strategy</connectorName>
+                <typeId>com.collibra.connect.dgc.connector.model.NamedResourceReference</typeId>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+      </map>
+    </entry>
+    <entry>
+      <string>http://www.mulesoft.org/schema/mule/collibra-dgc/get-attribute-type-by-name</string>
+      <map>
+        <entry>
+          <string>__default__</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.tooling.metadata.api.TypeRefMetaDataModel">
+                <connectorName>CollibraDGC__Connection_Managament_type_strategy</connectorName>
+                <typeId>com.collibra.connect.dgc.connector.model.NamedResourceReference</typeId>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+      </map>
+    </entry>
+    <entry>
+      <string>http://www.mulesoft.org/schema/mule/collibra-dgc/get-community-by-name</string>
+      <map>
+        <entry>
+          <string>__default__</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.tooling.metadata.api.TypeRefMetaDataModel">
+                <connectorName>CollibraDGC__Connection_Managament_type_strategy</connectorName>
+                <typeId>com.collibra.connect.dgc.connector.model.Community</typeId>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+      </map>
+    </entry>
+    <entry>
+      <string>http://www.mulesoft.org/schema/mule/collibra-dgc/get-domain-type-by-name</string>
+      <map>
+        <entry>
+          <string>__default__</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.tooling.metadata.api.TypeRefMetaDataModel">
+                <connectorName>CollibraDGC__Connection_Managament_type_strategy</connectorName>
+                <typeId>com.collibra.connect.dgc.connector.model.NamedResourceReference</typeId>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+      </map>
+    </entry>
+    <entry>
+      <string>http://www.mulesoft.org/schema/mule/collibra-dgc/list-assets</string>
+      <map>
+        <entry>
+          <string>__default__</string>
+          <org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+            <output class="org.mule.common.metadata.DefaultMetaData">
+              <payload class="org.mule.common.metadata.DefaultListMetaDataModel">
+                <dataType>LIST</dataType>
+                <metaDataModelPropertiesManager>
+                  <properties/>
+                </metaDataModelPropertiesManager>
+                <model class="org.mule.tooling.metadata.api.TypeRefMetaDataModel">
+                  <connectorName>CollibraDGC__Connection_Managament_type_strategy</connectorName>
+                  <typeId>com.collibra.connect.dgc.connector.model.Asset</typeId>
+                </model>
+                <isArray>false</isArray>
+              </payload>
+              <properties class="tree-map">
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>FLOW</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>INBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>OUTBOUND</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>SESSION</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+                <entry>
+                  <org.mule.common.metadata.MetaDataPropertyScope>RECORD</org.mule.common.metadata.MetaDataPropertyScope>
+                  <org.mule.common.metadata.MetaDataProperties>
+                    <fields class="sorted-set">
+                      <comparator class="org.mule.common.metadata.MetaDataProperties$MetaDataFieldComparator"/>
+                    </fields>
+                  </org.mule.common.metadata.MetaDataProperties>
+                </entry>
+              </properties>
+            </output>
+          </org.mule.tooling.metadata.cache.DefaultMetadataCacheEntry>
+        </entry>
+      </map>
+    </entry>
+    <entry>
       <string>http://www.mulesoft.org/schema/mule/collibra-dgc/login</string>
       <map>
         <entry>

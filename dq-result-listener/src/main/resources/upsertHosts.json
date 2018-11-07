@@ -1,0 +1,98 @@
+{
+  "TableViewConfig": {
+    "displayLength": -1,
+    "displayStart": 0,
+    "Default": {
+      "Operations": {
+        "Term": [
+          "UPDATE",
+          "ADD"
+        ],
+        "Attribute": [
+          "REPLACE"
+        ],
+        "Relation": [
+          "REPLACE"
+        ],
+        "Vocabulary": [
+          "ADD",
+          "UPDATE"
+        ]
+      }
+    },
+    "Resources": {
+      "Term": {
+        "Signifier": {
+          "name": "Term"
+        },
+        "Id": {
+          "name": "Id"
+        },
+        "ConceptType": {
+          "Signifier": {
+            "name": "Type"
+          },
+          "KeyContent": [
+            "Type"
+          ]
+        },
+        "Vocabulary": {
+          "Name": {
+            "name": "Domain"
+          },
+          "KeyContent": [
+            "Domain"
+          ],
+          "VocabularyType": {
+            "Signifier": {
+              "name": "VocabularyType"
+            },
+            "KeyContent": [
+              "VocabularyType"
+            ]
+          },
+          "Community": {
+            "Name": {
+              "name": "Community"
+            },
+            "KeyContent": [
+              "Community"
+            ]
+          }
+        }
+      }
+    },
+    "Columns": [
+      {
+        "Column": {
+          "fieldName": "Term",
+          "index": "0"
+        }
+      },
+      {
+        "Column": {
+          "fieldName": "Type",
+          "index": "1"
+        }
+      },
+      {
+        "Column": {
+          "fieldName": "Domain",
+          "index": "2"
+        }
+      },
+      {
+        "Column": {
+          "fieldName": "VocabularyType",
+          "index": "3"
+        }
+      },
+      {
+        "Column": {
+          "fieldName": "Community",
+          "index": "4"
+        }
+      }
+    ]
+  }
+}
