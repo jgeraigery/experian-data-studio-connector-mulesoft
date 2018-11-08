@@ -67,7 +67,7 @@ order by "Last Validated" asc]]></db:dynamic-query>
  "rowsPassed": payload["Rows Passed"],
  "rowsFailed": payload["Rows Failed"],
  "qualityScore": payload.Score,
- "result": "true" unless payload["Result"] == "Green" otherwise "false",
+ "result": "false" unless payload["Result"] == "Green" otherwise "true",
  "threshold": payload.Threshold,
  "customAttributes": [{
 	 "typeId": "00000000-0000-0000-0000-000000000216",
