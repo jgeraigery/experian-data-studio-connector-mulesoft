@@ -127,6 +127,7 @@ return payload;]]></scripting:script>
         <object-to-string-transformer doc:name="Object to String"/>
         <collibra-dgc:import-c-s-v config-ref="CollibraDGC__Connection_Managament_type_strategy" tableViewConfig="#[flowVars.tableViewConfig]" doc:name="Import Columns"/>
     </sub-flow>
+
     <sub-flow name="upsertDomainsAndDQResults">
         <flow-ref name="upsertDomains" doc:name="Upsert Domains"/>
         <logger message="Upserting DQ Results" level="INFO" doc:name="Upserting"/>
@@ -171,14 +172,7 @@ payload map ((result , index) -> {
 	(result.customAttributes map ((key,index) -> 
 		'$(key.typeId)' : key.values map {
 		value: $
-	})
-	),
-	"00000000-0000-0000-0000-000000031000": [{
-		name: result.dimension,
-		domain: {
-			id: p('dq2dgc_dqresult_consumer.metamodel.community.admin_community.domain.data_quality_dimensions.id')
-		}
-	}] when result.dimension != null otherwise []
+	}))
 }
 )]]></dw:set-payload>
         </dw:transform-message>
@@ -188,7 +182,7 @@ payload map ((result , index) -> {
 
 
     </sub-flow>
-    <sub-flow name="upsertDomains">
+     <sub-flow name="upsertDomains">
         <logger message="Upserting domains for DQ Results" level="INFO" doc:name="Upserting"/>
         <enricher target="#[flowVars.tableViewConfig]" doc:name="Message Enricher">
             <parse-template location="upsertDomains.json" doc:name="Parse config"/>
