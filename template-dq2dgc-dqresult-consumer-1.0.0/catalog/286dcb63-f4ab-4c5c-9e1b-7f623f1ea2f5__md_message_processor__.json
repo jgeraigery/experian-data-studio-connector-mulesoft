@@ -3,6 +3,12 @@
         "messagePayload": {
             "connectorName": "#_custom_mule_metadata_type_#",
             "typeId": "result"
+        },
+        "flowVariables": {
+            "results": {
+                "connectorName": "CollibraDGC__Connection_Managament_type_strategy",
+                "typeId": "00000000-0000-0000-0000-000000031107"
+            }
         }
     },
     "outputMessageMetadata": {},
