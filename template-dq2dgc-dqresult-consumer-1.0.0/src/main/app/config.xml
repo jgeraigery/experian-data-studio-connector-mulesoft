@@ -41,6 +41,10 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
 			 def generateDomainNameForDataQualityResults() {
 				return "Data Quality Results"
 			 }
+			 
+			 def generateDomainNameForDataQualityRules() {
+				return "${ruleBookAssetsDomainName}"
+			 }
              
 			def calculateResult(result) {
              	if(result.result != null) {
