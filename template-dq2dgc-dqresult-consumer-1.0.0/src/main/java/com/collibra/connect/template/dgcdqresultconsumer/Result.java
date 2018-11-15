@@ -12,6 +12,7 @@ public class Result {
 	private String name;
 	private String description;
 	private String note;
+	private String dataQualityRuleName;
 
 	private String dimension;
 
@@ -132,5 +133,13 @@ public class Result {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getDataQualityRuleName() {
+		return dataQualityRuleName;
+	}
+
+	public void setDataQualityRuleName(String dataQualityRuleName) {
+		this.dataQualityRuleName = dataQualityRuleName;
 	}
 }

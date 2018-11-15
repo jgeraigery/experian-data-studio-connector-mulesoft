@@ -135,7 +135,7 @@ return payload;]]></scripting:script>
 
     <sub-flow name="upsertDomainsAndDQResults">
         <flow-ref name="upsertDomains" doc:name="Upsert Domains"/>
-        <logger message="Upserting DQ Results" level="INFO" doc:name="Upserting"/>
+        <logger message="Upserting DQ Results: payload -- #[payload] -- flowVars -- #[flowVars]" level="INFO" doc:name="Upserting"/>
         <set-payload value="#[flowVars.results]" doc:name="Apply 'results'"/>
         <dw:transform-message metadata:id="286dcb63-f4ab-4c5c-9e1b-7f623f1ea2f5" doc:name="Results to Data Quality Metric">
             <dw:input-variable mimeType="application/java" variableName="results"/>
@@ -150,12 +150,7 @@ payload map ((result , index) -> {
 		community: {
 			name: flowVars.communityName
 		}
-	},
-	"edd0ead3-de97-40b7-8868-3d1ff585319e:TARGET": [{
-	 	name: result.dataQualityRule,
-	 	id: "00000000-0000-0000-0000-000000007016"
-	}] when result.dataQualityRule != null otherwise [],
-	
+	},	
 	"00000000-0000-0000-0000-000000000239": [{
 		value: result.threshold as :string
 	}],
@@ -193,7 +188,7 @@ payload map ((result , index) -> {
 	}] when result.dimension != null otherwise [],
 	
 	"${dataQualityRuleToDataQualityMetricId}:TARGET": ([{
-		name: "Test Rule",
+		name: result.dataQualityRuleName,
 		domain: {
 			name: p('ruleBookAssetsDomainName'),
 			domainType: {
@@ -203,7 +198,7 @@ payload map ((result , index) -> {
 				name: flowVars.communityName
 			}
 		}
-	}])
+	}]) when result.dataQualityRuleName != null otherwise []
 	
 }
 )]]></dw:set-payload>

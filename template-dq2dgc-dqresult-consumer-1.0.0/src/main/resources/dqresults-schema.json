@@ -27,7 +27,7 @@
 					"dimension": {
 						"type": "string"
 					},
-					"dataQualityRule": {
+					"dataQualityRuleName": {
 						"type": "string"
 					},
 					"evaluatedColumns": {
