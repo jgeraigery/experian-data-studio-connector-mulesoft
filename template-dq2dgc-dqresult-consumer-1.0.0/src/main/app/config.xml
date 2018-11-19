@@ -34,10 +34,6 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
              	return column.databaseName + '.' + column.schemaName + '.' + column.tableName + '.' + column.name 
              }
              
-             def generateDataQualityRule(column) {
-             	return 
-             }
-             
 			 def generateDomainNameForDataQualityResults() {
 				return "Data Quality Results"
 			 }

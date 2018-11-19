@@ -17,8 +17,7 @@ http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/cu
         <flow-ref name="validateAndParse" doc:name="Validate and parse"/>
         <set-variable variableName="projects" value="#[payload.projects]" doc:name="Set 'projects"/>
         <set-variable variableName="results" value="#[payload.results]" doc:name="Set 'results'"/>
-        <set-variable variableName="rules" value="#[payload.rules]" doc:name="Copy_of_Set 'rules'"/>
-        <set-variable variableName="ruleFamilies" value="#[payload.ruleFamilies]" doc:name="Copy_of_Set 'rulefamilies'"/>
+
         <set-variable variableName="externalSystemId" value="#[payload.externalSystemId]" doc:name="Set 'externalSystemId'"/>
 
         <set-variable variableName="communityName" value="#[generateCommunityName(payload.communityName)]" doc:name="Set 'communityName'"/>
@@ -75,9 +74,9 @@ return payload;]]></scripting:script>
 ---
 (flatten payload.evaluatedColumns) map ((column , index) -> {
 	column_0: generateSchemaName(column),
-	column_1: p('dq2dgc_dqresult_consumer.metamodel.asset.database.id'),
+	column_1: p('databaseAssetTypeId'),
 	column_2: generateDomainNameForDataCatalogAssets(column),
-	column_3: p('dq2dgc_dqresult_consumer.metamodel.domain.data_asset_domain.id'),
+	column_3: p('dataAssetDomainTypeId'),
 	column_4: flowVars.communityName
 })
 
@@ -99,7 +98,7 @@ return payload;]]></scripting:script>
 ---
 (flatten payload.evaluatedColumns) map ((column , index) -> {
 	column_0: generateTableName(column),
-	column_1: p('dq2dgc_dqresult_consumer.metamodel.asset.table.id'),
+	column_1: p('tableAssetTypeId'),
 	column_2: generateDomainNameForDataCatalogAssets(column),
 	column_3: flowVars.communityName,
 	column_4: generateSchemaName(column),
@@ -122,7 +121,7 @@ return payload;]]></scripting:script>
 ---
 (flatten payload.evaluatedColumns) map ((column , index) -> {
 	column_0: generateColumnName(column),
-	column_1: p('dq2dgc_dqresult_consumer.metamodel.asset.column.id'),
+	column_1: p('columnAssetTypeId'),
 	column_2: generateDomainNameForDataCatalogAssets(column),
 	column_3: flowVars.communityName,
 	column_4: generateTableName(column),
@@ -184,7 +183,7 @@ payload map ((result , index) -> {
 	"63d6a62f-e15b-40cb-b3ee-f6aa01ae05e7:TARGET": [{
 		name: result.dimension,
 		domain: {
-			id: p('dq2dgc_dqresult_consumer.metamodel.community.admin_community.domain.data_quality_dimensions.id')
+			id: p('dataQualityDimensionsDomainTypeId')
 		}
 	}] when result.dimension != null otherwise [],
 	
@@ -222,7 +221,7 @@ payload map ((result , index) -> {
 ---
 payload map ((result , index) -> {
 	column_0: generateDomainNameForDataQualityResults(),
-	column_1: p('dq2dgc_dqresult_consumer.metamodel.domain.governance_asset_domain.id'),
+	column_1: p('governanceAssetDomainTypeId'),
 	column_2: flowVars.communityName
 })]]></dw:set-payload>
         </dw:transform-message>
