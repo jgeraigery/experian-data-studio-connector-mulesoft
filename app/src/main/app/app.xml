@@ -40,7 +40,7 @@ order by "UID" asc]]></db:dynamic-query>
             <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS"/>
             <watermark variable="lastValidatedTime" default-expression="1970-01-01" selector="MAX" selector-expression="#[payload[&quot;Last Validated&quot;]]"/>
             <db:select config-ref="Generic_Database_Configuration" target="#[payload]" maxRows="10" fetchSize="10" doc:name="Rules Database">
-                <db:dynamic-query><![CDATA[select * from "PROFILES"
+                <db:dynamic-query><![CDATA[select * from "pandora_rules"
 order by "Last Validated" asc]]></db:dynamic-query>
             </db:select>
         </poll>
@@ -53,25 +53,26 @@ order by "Last Validated" asc]]></db:dynamic-query>
  "externalSystemId": "Pandora 5.9.3",
  "communityName": "MyCommunity",
  "results": [{
-	 "externalEntityId": payload["External Database"] ++ "." ++ payload["External Schema"] ++ "." ++ payload["External Table Name"],
-	 "name": payload.Name,
-	 "description": payload.Description,
-	 "note": payload.Function,
-	 "dimension": "Completeness",
+	 "externalEntityId": payload.external_database ++ "." ++ payload.external_schema ++ "." ++ payload.external_table_name,
+	 "name": payload.name,
+	 "dataQualityRuleName": splitBy(payload.description, ".")[0] when sizeOf(splitBy(payload.description, ".")) >= 1 otherwise "",
+	 "note": payload.function,
+	 "dimension": splitBy(payload.description, ".")[1] when sizeOf(splitBy(payload.description, ".")) >= 2 otherwise "",
+	 "description": splitBy(payload.description, ".")[2] when sizeOf(splitBy(payload.description, ".")) == 3 otherwise "",
 	 "evaluatedColumns": [{
-		 "databaseName": payload["External Database"],
-		 "schemaName": payload["External Schema"],
-		 "tableName": payload["External Table Name"],
-		 "name": payload["External Column Name"]
+		 "databaseName": payload.external_database,
+		 "schemaName": payload.external_schema,
+		 "tableName": payload.external_table_name,
+		 "name": payload.external_column_name
  	 }],
- "rowsPassed": payload["Rows Passed"],
- "rowsFailed": payload["Rows Failed"],
- "qualityScore": payload.Score,
- "result": "false" unless payload["Result"] == "Green" otherwise "true",
- "threshold": payload.Threshold,
+ "rowsPassed": payload.rows_passed,
+ "rowsFailed": payload.rows_failed,
+ "qualityScore": payload.score,
+ "result": "false" unless payload.result == "Green" otherwise "true",
+ "threshold": payload.threshold,
  "customAttributes": [{
-	 "typeId": "00000000-0000-0000-0000-000000000216",
-	 "values": ["The root cause analysis of the quality score below threshold"]
+	 "typeId": "",
+	 "values": [""]
   }]	
  }]
 }]]></dw:set-payload>
