@@ -58,10 +58,10 @@
 						}
 					},
 					"rowsPassed": {
-						"type": "integer"
+						"type": "number"
 					},
 					"rowsFailed": {
-						"type": "integer"
+						"type": "number"
 					},
 					"qualityScore": {
 						"type": "number",
