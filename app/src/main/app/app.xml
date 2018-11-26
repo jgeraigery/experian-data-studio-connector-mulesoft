@@ -17,31 +17,11 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
     <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8083" doc:name="HTTP Request Configuration" usePersistentConnections="false">
         <http:basic-authentication username="connect_user" password="connect_password" preemptive="true"/>
     </http:request-config>
-    <flow name="sendPandoraAlertsFlow" processingStrategy="synchronous">
-        <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS"/>
-            <watermark variable="lastRecordId" default-expression="0" selector="MAX" selector-expression="#[payload[&quot;UID&quot;]]"/>
-            <db:select config-ref="Generic_Database_Configuration"  target="#[payload]" maxRows="10" fetchSize="10" doc:name="Alerts Database">
-                <db:dynamic-query><![CDATA[select * from "ALERTS" 
-where "UID" > #[flowVars['lastRecordId']] 
-order by "UID" asc]]></db:dynamic-query>
-            </db:select>
-        </poll>
-        <choice doc:name="Choice">
-            <when expression="#[payload.isEmpty() == false]">
-                <set-payload value="  " doc:name="Set Payload"/>
-                <file:outbound-endpoint path="C:\pandora\import" outputPattern="TEST_VOYA_trigger.xml" connector-ref="File" responseTimeout="10000" doc:name="File"/>
-            </when>
-            <otherwise>
-                <logger level="INFO" doc:name="Logger" />
-            </otherwise>
-        </choice>
-    </flow>
     <flow name="updateRulesFlow" processingStrategy="synchronous">
         <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS"/>
-            <watermark variable="lastValidatedTime" default-expression="1970-01-01" selector="MAX" selector-expression="#[payload[&quot;Last Validated&quot;]]"/>
-            <db:select config-ref="Generic_Database_Configuration" target="#[payload]" maxRows="10" fetchSize="10" doc:name="Rules Database">
+            <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS" />
+            <watermark variable="lastValidatedTime" default-expression="1970-01-01 00:00:00" selector="MAX" selector-expression="#[payload[&quot;last_validated&quot;]]"/>
+            <db:select config-ref="Generic_Database_Configuration" target="#[payload]" maxRows="10" fetchSize="10" doc:name="Rules Database" streaming="true">
                 <db:dynamic-query><![CDATA[select * from "pandora_rules"
 order by "last_validated" asc]]></db:dynamic-query>
             </db:select>
@@ -55,7 +35,7 @@ order by "last_validated" asc]]></db:dynamic-query>
 	 "externalSystemId": "Pandora 5.9.3",
 	 "communityName": "MyCommunity",
 	 "results": [{
-		 "externalEntityId": payload.external_database ++ "." ++ payload.external_schema ++ "." ++ payload.external_table_name,
+		 "externalEntityId": payload.external_database ++ "." ++ payload.external_schema ++ "." ++ payload.external_table_name ++ "." ++ payload.external_column_name,
 		 "name": payload.name,
 		 "dataQualityRuleName": ( (payload.description splitBy (".") )[0] ) when (1 <= sizeOf ( payload.description splitBy (".") ) ) otherwise "",
 		 "note": payload.function,
@@ -80,9 +60,10 @@ order by "last_validated" asc]]></db:dynamic-query>
  }]]></dw:set-payload>
             </dw:transform-message>
             <set-payload value="#[[&quot;flowId&quot;: &quot;updateRules&quot;, &quot;payload&quot;: payload]]" doc:name="Set Payload"/>
-            <http:request config-ref="HTTP_Request_Configuration" path="/collibra.connect.gateway" method="POST" doc:name="HTTP">
+            <http:request config-ref="HTTP_Request_Configuration" path="/collibra.connect.gateway" method="POST" doc:name="HTTP" followRedirects="false" parseResponse="false">
                 <http:request-builder>
                     <http:header headerName="Content-Type" value="application/x-www-form-urlencoded"/>
+
                 </http:request-builder>
             </http:request>
 
