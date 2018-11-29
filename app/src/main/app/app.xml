@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:collibra-dgc="http://www.mulesoft.org/schema/mule/collibra-dgc" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:collibra-dgc="http://www.mulesoft.org/schema/mule/collibra-dgc" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
@@ -9,7 +9,10 @@ http://www.mulesoft.org/schema/mule/collibra-dgc http://www.mulesoft.org/schema/
 http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
 http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
 http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd
-http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
     <collibra-dgc:config name="CollibraDGC__Connection_Managament_type_strategy" username="Admin" password="Password123" baseApplicationUrl="https://experian-dev-54.collibra.com" doc:name="CollibraDGC: Connection Managament type strategy"/>
     <db:generic-config name="Generic_Database_Configuration" url="jdbc:postgresql://localhost:5432/postgres?user=postgres&amp;password=postgres" driverClassName="org.postgresql.Driver" doc:name="Generic Database Configuration"/>
     <file:connector name="File" autoDelete="false" streaming="true" validateConnections="true" doc:name="File" outputAppend="true">
@@ -17,57 +20,88 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
     <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8083" doc:name="HTTP Request Configuration" usePersistentConnections="false">
         <http:basic-authentication username="connect_user" password="connect_password" preemptive="true"/>
     </http:request-config>
-    <flow name="updateRulesFlow" processingStrategy="synchronous">
+    <scripting:transformer name="JavaScript" doc:name="JavaScript">
+        <scripting:script engine="JavaScript"><![CDATA[log.info("Message");
+log.info(messasge);
+log.info("Payload");
+log.info(payload);
+]]></scripting:script>
+    </scripting:transformer>
+    <scripting:transformer name="JavaScript1" doc:name="JavaScript">
+        <scripting:script engine="JavaScript"><![CDATA[log.info(flowVars.collibraRule.lastModificationDate);]]></scripting:script>
+    </scripting:transformer>
+    <scripting:transformer name="JavaScript2" doc:name="JavaScript">
+        <scripting:script engine="JavaScript"><![CDATA[log.info(new Date(flowVars.collibraRule.lastModificationDate));]]></scripting:script>
+    </scripting:transformer>
+        <flow name="sendPandoraAlertsFlow" processingStrategy="synchronous">
         <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS" />
-            <watermark variable="lastValidatedTime" default-expression="1970-01-01 00:00:00" selector="MAX" selector-expression="#[payload[&quot;last_validated&quot;]]"/>
-            <db:select config-ref="Generic_Database_Configuration" target="#[payload]" maxRows="10" fetchSize="10" doc:name="Rules Database" streaming="true">
-                <db:dynamic-query><![CDATA[select * from "pandora_rules"
-order by "last_validated" asc]]></db:dynamic-query>
+            <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS"/>
+            <watermark variable="lastModifiedDate" default-expression="'1970-01-01 00:00:00'" selector="MAX" />
+            <db:select config-ref="Generic_Database_Configuration"  target="#[payload]" maxRows="10" fetchSize="10" doc:name="Alerts Database">
+                <db:dynamic-query><![CDATA[select * from "pandora_alerts" 
+where "last_modified_on" > #[flowVars['lastModifiedDate']] 
+order by "last_modified_on" asc]]></db:dynamic-query>
             </db:select>
         </poll>
-        <foreach counterVariableName="ruleIndex" rootMessageVariableName="rules" doc:name="For Each">
-            <dw:transform-message doc:name="Transform to JSON Payload">
-                <dw:set-payload><![CDATA[%dw 1.0
-%output application/json
----
-{
-	 "externalSystemId": "Pandora 5.9.3",
-	 "communityName": "MyCommunity",
-	 "results": [{
-		 "externalEntityId": payload.external_database ++ "." ++ payload.external_schema ++ "." ++ payload.external_table_name ++ "." ++ payload.external_column_name,
-		 "name": payload.name,
-		 "dataQualityRuleName": ( (payload.description splitBy (".") )[0] ) when (1 <= sizeOf ( payload.description splitBy (".") ) ) otherwise "",
-		 "note": payload.function,
-		 "dimension":  ( (payload.description splitBy (".") )[1] ) when (2 <= sizeOf (payload.description splitBy (".") ) ) otherwise "",
-		 "description": ( (payload.description splitBy (".") )[2] ) when (3 <= sizeOf (payload.description  splitBy (".") ) ) otherwise "",
-		 "evaluatedColumns": [{
-			 "databaseName": payload.external_database,
-			 "schemaName": payload.external_schema,
-			 "tableName": payload.external_table_name,
-			 "name": payload.external_column_name
-	 	 }],
-	 "rowsPassed": payload.rows_passed,
-	 "rowsFailed": payload.rows_failed,
-	 "qualityScore": payload.score,
-	 "result": false unless payload.result == "Green" otherwise true,
-	 "threshold": 0 unless (payload contains "threshold") otherwise payload.threshold,
-	 "customAttributes": [{
-		 "typeId": "",
-		 "values": [""]
-	  }]	
-	 }]
- }]]></dw:set-payload>
-            </dw:transform-message>
-            <set-payload value="#[[&quot;flowId&quot;: &quot;updateRules&quot;, &quot;payload&quot;: payload]]" doc:name="Set Payload"/>
-            <http:request config-ref="HTTP_Request_Configuration" path="/collibra.connect.gateway" method="POST" doc:name="HTTP" followRedirects="false" parseResponse="false">
-                <http:request-builder>
-                    <http:header headerName="Content-Type" value="application/x-www-form-urlencoded"/>
-
-                </http:request-builder>
-            </http:request>
-
-            <logger message="#[payload]" level="INFO" doc:name="Logger"/>
+        <logger message="Querying for Pandora alerts" level="INFO" doc:name="Logger"/>
+        <choice doc:name="Choice">
+            <when expression="#[payload.isEmpty() == false]">
+                <set-payload value="  " doc:name="Set Payload"/>
+                <file:outbound-endpoint path="C:\pandora\import" outputPattern="TEST_VOYA_trigger.xml" connector-ref="File" responseTimeout="10000" doc:name="File"/>
+                <logger message="Changes detected - file updated." level="INFO" doc:name="Logger"/>
+            </when>
+            <otherwise>
+                <logger level="INFO" doc:name="Logger" message="No changes detected -- skipping. "/>
+            </otherwise>
+        </choice>
+    </flow>
+    <flow name="sendNewRulestoDatabase">
+        <poll doc:name="Poll">
+            <fixed-frequency-scheduler frequency="10" timeUnit="SECONDS"/>
+            <collibra-dgc:list-assets config-ref="CollibraDGC__Connection_Managament_type_strategy" domainId="f23ef3f5-6949-42bb-9869-ea58ada1205e" doc:name="CollibraDGC"/>
+        </poll>
+        <logger message="Sending Collibra Rules to database" level="INFO" doc:name="Logger"/>
+        <foreach doc:name="For Each">
+            <scripting:component doc:name="JavaScript">
+                <scripting:script engine="JavaScript"><![CDATA[try {
+	flowVars.lastModificationDate = eval("new Date(" + payload.lastModificationDate + ").toJSON()").replace(/T|\..+/g, ' ').trim();
+	flowVars.creationDate = eval("new Date(" + payload.creationDate+ ").toJSON()").replace(/T|\..+/g, ' ').trim();
+	flowVars.collibraRule = payload;
+} catch(e) {
+	log.error("Something went wrong:");
+	log.error(e);	
+}]]></scripting:script>
+            </scripting:component>
+            <collibra-dgc:get-user config-ref="CollibraDGC__Connection_Managament_type_strategy" userId="#[flowVars.collibraRule.lastModifiedBy]" doc:name="Get lastModifiedBy user"/>
+            <set-variable variableName="lastModifiedBy" value="#[payload.emailAddress]" doc:name="Variable"/>
+            <collibra-dgc:get-user config-ref="CollibraDGC__Connection_Managament_type_strategy" userId="#[flowVars.collibraRule.createdBy]" doc:name="Get createdBy user"/>
+            <set-variable variableName="createdBy" value="#[payload.emailAddress]" doc:name="Variable"/>
+            <logger message="Checking database for rule existence" level="INFO" doc:name="Logger"/>
+            <db:select config-ref="Generic_Database_Configuration" queryTimeout="1000" doc:name="Check if Rule is in database">
+                <db:parameterized-query><![CDATA[select "id" from "pandora_alerts"
+where "id" = #[flowVars.collibraRule.id]]]></db:parameterized-query>
+            </db:select>
+            <choice doc:name="Choice">
+                <when expression="#[payload != []]">
+                    <logger message="Updating rule in pandora_alerts table" level="INFO" doc:name="Logger"/>
+                    <db:update config-ref="Generic_Database_Configuration" doc:name="Update rule">
+                        <db:parameterized-query><![CDATA[UPDATE pandora_alerts 
+SET 
+last_modified_by = #[flowVars.lastModifiedBy], 
+last_modified_on = #[flowVars.lastModificationDate],
+name = #[flowVars.collibraRule.name]
+WHERE id = #[flowVars.collibraRule.id];]]></db:parameterized-query>
+                    </db:update>
+                </when>
+                <otherwise>
+                    <logger message="Inserting rule in pandora_alerts table." level="INFO" doc:name="Logger"/>
+                    <db:insert config-ref="Generic_Database_Configuration" doc:name="Insert Rule">
+                        <db:parameterized-query><![CDATA[INSERT INTO pandora_alerts (id, created_on, created_by, last_modified_on, last_modified_by, name, domain_id, domain_name)
+VALUES (#[flowVars.collibraRule.id], #[flowVars.creationDate], #[flowVars.createdBy], #[flowVars.lastModificationDate], #[flowVars.lastModifiedBy], #[flowVars.collibraRule.name], #[flowVars.collibraRule.domain.id], #[flowVars.collibraRule.domain.name])]]></db:parameterized-query>
+                    </db:insert>
+                </otherwise>
+            </choice>
         </foreach>
     </flow>
+           
 </mule>
