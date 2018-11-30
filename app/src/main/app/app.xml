@@ -20,33 +20,20 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
     <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8083" doc:name="HTTP Request Configuration" usePersistentConnections="false">
         <http:basic-authentication username="connect_user" password="connect_password" preemptive="true"/>
     </http:request-config>
-    <scripting:transformer name="JavaScript" doc:name="JavaScript">
-        <scripting:script engine="JavaScript"><![CDATA[log.info("Message");
-log.info(messasge);
-log.info("Payload");
-log.info(payload);
-]]></scripting:script>
-    </scripting:transformer>
-    <scripting:transformer name="JavaScript1" doc:name="JavaScript">
-        <scripting:script engine="JavaScript"><![CDATA[log.info(flowVars.collibraRule.lastModificationDate);]]></scripting:script>
-    </scripting:transformer>
-    <scripting:transformer name="JavaScript2" doc:name="JavaScript">
-        <scripting:script engine="JavaScript"><![CDATA[log.info(new Date(flowVars.collibraRule.lastModificationDate));]]></scripting:script>
-    </scripting:transformer>
-        <flow name="sendPandoraAlertsFlow" processingStrategy="synchronous">
+        <flow name="sendPandoraAlertsFlow" processingStrategy="synchronous" doc:description="The sendPandoraAlertsFlow polls the pandora_alerts table for changes and triggers an alert in Pandora. ">
         <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS"/>
-            <watermark variable="lastModifiedDate" default-expression="'1970-01-01 00:00:00'" selector="MAX" />
-            <db:select config-ref="Generic_Database_Configuration"  target="#[payload]" maxRows="10" fetchSize="10" doc:name="Alerts Database">
-                <db:dynamic-query><![CDATA[select * from "pandora_alerts" 
-where "last_modified_on" > #[flowVars['lastModifiedDate']] 
-order by "last_modified_on" asc]]></db:dynamic-query>
+            <fixed-frequency-scheduler frequency="60" timeUnit="SECONDS"/>
+			<watermark variable="lastModifiedDate" default-expression="&quot;1970-01-01 00:00:00&quot;" selector="FIRST" selector-expression="#[payload.last_modified_on]"/>
+            <db:select config-ref="Generic_Database_Configuration" target="#[payload]" doc:name="Alerts Database">
+                <db:dynamic-query><![CDATA[select last_modified_on from "pandora_alerts" 
+where "last_modified_on" > '#[flowVars.lastModifiedDate]'
+order by "last_modified_on" desc]]></db:dynamic-query>
             </db:select>
         </poll>
-        <logger message="Querying for Pandora alerts" level="INFO" doc:name="Logger"/>
+        <logger message="Querying for Pandora alerts: #[payload]" level="INFO" doc:name="Logger"/>
         <choice doc:name="Choice">
-            <when expression="#[payload.isEmpty() == false]">
-                <set-payload value="  " doc:name="Set Payload"/>
+            <when expression="#[payload != []]">
+                <logger message="Variable payload: #[payload]" level="INFO" doc:name="Logger"/>
                 <file:outbound-endpoint path="C:\pandora\import" outputPattern="TEST_VOYA_trigger.xml" connector-ref="File" responseTimeout="10000" doc:name="File"/>
                 <logger message="Changes detected - file updated." level="INFO" doc:name="Logger"/>
             </when>
@@ -55,53 +42,65 @@ order by "last_modified_on" asc]]></db:dynamic-query>
             </otherwise>
         </choice>
     </flow>
-    <flow name="sendNewRulestoDatabase">
+    <flow name="sendNewRulestoDatabase" doc:description="The sendNewRulesToDatabase flow sends rules present in specified Rulebook to a database as configured. ">
         <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="10" timeUnit="SECONDS"/>
+            <fixed-frequency-scheduler frequency="60" timeUnit="SECONDS"/>
             <collibra-dgc:list-assets config-ref="CollibraDGC__Connection_Managament_type_strategy" domainId="f23ef3f5-6949-42bb-9869-ea58ada1205e" doc:name="CollibraDGC"/>
         </poll>
         <logger message="Sending Collibra Rules to database" level="INFO" doc:name="Logger"/>
-        <foreach doc:name="For Each">
-            <scripting:component doc:name="JavaScript">
-                <scripting:script engine="JavaScript"><![CDATA[try {
+        <choice doc:name="Choice">
+            <when expression="#[payload != null]">
+                <foreach doc:name="For Each">
+                    <scripting:component doc:name="JavaScript">
+                        <scripting:script engine="JavaScript"><![CDATA[try {
 	flowVars.lastModificationDate = eval("new Date(" + payload.lastModificationDate + ").toJSON()").replace(/T|\..+/g, ' ').trim();
 	flowVars.creationDate = eval("new Date(" + payload.creationDate+ ").toJSON()").replace(/T|\..+/g, ' ').trim();
 	flowVars.collibraRule = payload;
-} catch(e) {
-	log.error("Something went wrong:");
-	log.error(e);	
-}]]></scripting:script>
-            </scripting:component>
-            <collibra-dgc:get-user config-ref="CollibraDGC__Connection_Managament_type_strategy" userId="#[flowVars.collibraRule.lastModifiedBy]" doc:name="Get lastModifiedBy user"/>
-            <set-variable variableName="lastModifiedBy" value="#[payload.emailAddress]" doc:name="Variable"/>
-            <collibra-dgc:get-user config-ref="CollibraDGC__Connection_Managament_type_strategy" userId="#[flowVars.collibraRule.createdBy]" doc:name="Get createdBy user"/>
-            <set-variable variableName="createdBy" value="#[payload.emailAddress]" doc:name="Variable"/>
-            <logger message="Checking database for rule existence" level="INFO" doc:name="Logger"/>
-            <db:select config-ref="Generic_Database_Configuration" queryTimeout="1000" doc:name="Check if Rule is in database">
-                <db:parameterized-query><![CDATA[select "id" from "pandora_alerts"
+} catch(e) { }	]]></scripting:script>
+                    </scripting:component>
+                    <choice doc:name="Choice">
+                        <when expression="#[flowVars.lastModificationDate != null]">
+                            <logger message="Javascript payload found -- continuing." level="INFO" doc:name="Logger"/>
+                            <collibra-dgc:get-user config-ref="CollibraDGC__Connection_Managament_type_strategy" userId="#[flowVars.collibraRule.lastModifiedBy]" doc:name="Get lastModifiedBy user"/>
+                            <set-variable variableName="lastModifiedBy" value="#[payload.emailAddress]" doc:name="Variable"/>
+                            <collibra-dgc:get-user config-ref="CollibraDGC__Connection_Managament_type_strategy" userId="#[flowVars.collibraRule.createdBy]" doc:name="Get createdBy user"/>
+                            <set-variable variableName="createdBy" value="#[payload.emailAddress]" doc:name="Variable"/>
+                            <logger message="Checking database for rule existence" level="INFO" doc:name="Logger"/>
+                            <db:select config-ref="Generic_Database_Configuration" queryTimeout="1000" doc:name="Check if Rule is in database" streaming="true">
+                                <db:parameterized-query><![CDATA[select "id" from "pandora_alerts"
 where "id" = #[flowVars.collibraRule.id]]]></db:parameterized-query>
-            </db:select>
-            <choice doc:name="Choice">
-                <when expression="#[payload != []]">
-                    <logger message="Updating rule in pandora_alerts table" level="INFO" doc:name="Logger"/>
-                    <db:update config-ref="Generic_Database_Configuration" doc:name="Update rule">
-                        <db:parameterized-query><![CDATA[UPDATE pandora_alerts 
+                            </db:select>
+                            <choice doc:name="Choice">
+                                <when expression="#[payload != null]">
+                                    <logger message="Updating rule in pandora_alerts table. #[payload]" level="INFO" doc:name="Update rules"/>
+                                    <db:update config-ref="Generic_Database_Configuration" doc:name="Update rule">
+                                        <db:parameterized-query><![CDATA[UPDATE pandora_alerts 
 SET 
 last_modified_by = #[flowVars.lastModifiedBy], 
 last_modified_on = #[flowVars.lastModificationDate],
 name = #[flowVars.collibraRule.name]
 WHERE id = #[flowVars.collibraRule.id];]]></db:parameterized-query>
-                    </db:update>
-                </when>
-                <otherwise>
-                    <logger message="Inserting rule in pandora_alerts table." level="INFO" doc:name="Logger"/>
-                    <db:insert config-ref="Generic_Database_Configuration" doc:name="Insert Rule">
-                        <db:parameterized-query><![CDATA[INSERT INTO pandora_alerts (id, created_on, created_by, last_modified_on, last_modified_by, name, domain_id, domain_name)
+                                    </db:update>
+                                </when>
+                                <otherwise>
+                                    <logger message="Inserting rule in pandora_alerts table. #[payload]" level="INFO" doc:name="Insert rules"/>
+                                    <db:insert config-ref="Generic_Database_Configuration" doc:name="Insert Rule">
+                                        <db:parameterized-query><![CDATA[INSERT INTO pandora_alerts (id, created_on, created_by, last_modified_on, last_modified_by, name, domain_id, domain_name)
 VALUES (#[flowVars.collibraRule.id], #[flowVars.creationDate], #[flowVars.createdBy], #[flowVars.lastModificationDate], #[flowVars.lastModifiedBy], #[flowVars.collibraRule.name], #[flowVars.collibraRule.domain.id], #[flowVars.collibraRule.domain.name])]]></db:parameterized-query>
-                    </db:insert>
-                </otherwise>
-            </choice>
-        </foreach>
+                                    </db:insert>
+                                </otherwise>
+                            </choice>
+                        </when>
+                        <otherwise>
+                            <logger message="Something went wrong with the Javascript." level="INFO" doc:name="Logger"/>
+                        </otherwise>
+                    </choice>
+                </foreach>
+            </when>
+            <otherwise>
+                <logger message="Collibra payload not found" level="INFO" doc:name="Logger"/>
+            </otherwise>
+        </choice>
     </flow>
            
 </mule>
