@@ -48,16 +48,16 @@ order by "last_validated" desc]]></db:dynamic-query>
 		 "externalEntityId": payload.external_database ++ "." ++ payload.external_schema ++ "." ++ payload.external_table_name ++ "." ++ payload.external_column_name,
 		 "name": payload.name,
 		 "dataQualityRuleName": payload.description match {
-		 	/^([^.]+)\.([^.]+)\.([^.]+)/ -> $[0],
+		 	/^([^.]+)\./ -> $[1],
 		 	default -> ""
 		 },	
 		 "note": payload.function,
 		 "dimension": payload.description match {
-		 	/^([^.]+)\.([^.]+)\.([^.]+)/ -> $[1],
+		 	/^([^.]+)\.([^.]+)\./ -> $[2],
 		 	default -> ""
 		 },	 	 
 		 "description": payload.description match {
-		 	/^([^.]+)\.([^.]+)\.([^.]+)/ -> $[2],
+		 	/^([^.]+)\.([^.]+)\.([^.]+)/ -> $[3],
 		 	default -> ""
 		 },	 
 		 "evaluatedColumns": [{
@@ -74,8 +74,8 @@ order by "last_validated" desc]]></db:dynamic-query>
 	 	default -> false
 	 },
 	 "threshold": payload.pass_range match {	
-	 	/^(.+)%/ -> $[0],
-	 	default -> ""
+	 	/(\d+)%/ -> $[1] as :number,
+	 	default -> 0
 	 },
 	 "customAttributes": [{
 		 "typeId": "",
@@ -100,7 +100,7 @@ order by "last_validated" desc]]></db:dynamic-query>
     
         <flow name="sendPandoraAlertsFlow" processingStrategy="synchronous" doc:description="The sendPandoraAlertsFlow polls the pandora_alerts table for changes and triggers an alert in Pandora. ">
         <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="60" timeUnit="SECONDS" startDelay="100000"/>
+            <fixed-frequency-scheduler frequency="60" timeUnit="SECONDS" />
 			<watermark variable="lastModifiedDate" default-expression="&quot;1970-01-01 00:00:00&quot;" selector="FIRST" selector-expression="#[payload.last_modified_on]"/>
             <db:select config-ref="Generic_Database_Configuration" target="#[payload]" doc:name="Alerts Database">
                 <db:dynamic-query><![CDATA[select last_modified_on from "pandora_alerts" 
@@ -122,7 +122,7 @@ order by "last_modified_on" desc]]></db:dynamic-query>
     </flow>
     <flow name="sendNewRulestoDatabase" doc:description="The sendNewRulesToDatabase flow sends rules present in specified Rulebook to a database as configured. ">
         <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="60" timeUnit="SECONDS" startDelay="100000"/>
+            <fixed-frequency-scheduler frequency="60" timeUnit="SECONDS" />
             <collibra-dgc:list-assets config-ref="CollibraDGC__Connection_Managament_type_strategy" domainId="f23ef3f5-6949-42bb-9869-ea58ada1205e" doc:name="CollibraDGC"/>
         </poll>
         <logger message="Sending Collibra Rules to database" level="INFO" doc:name="Logger"/>
