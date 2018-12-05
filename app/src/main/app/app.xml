@@ -17,47 +17,52 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
     <db:generic-config name="Generic_Database_Configuration" url="jdbc:postgresql://localhost:5432/postgres?user=postgres&amp;password=postgres" driverClassName="org.postgresql.Driver" doc:name="Generic Database Configuration"/>
     <file:connector name="File" autoDelete="false" streaming="true" validateConnections="true" doc:name="File" outputAppend="true">
     </file:connector>
-    <http:request-config name="HTTP_Request_Configuration" host="localhost" port="8083" doc:name="HTTP Request Configuration" usePersistentConnections="false">
+    <http:request-config responseTimeout="90000" name="HTTP_Request_Configuration" host="localhost" port="8083" doc:name="HTTP Request Configuration" usePersistentConnections="false">
         <http:basic-authentication username="connect_user" password="connect_password" preemptive="true"/>
     </http:request-config>
     <flow name="updateRulesFlow" processingStrategy="synchronous">
         <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS" />
+            <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS" startDelay="15"/>
             <watermark variable="lastValidatedTime" default-expression="1970-01-01 00:00:00" selector="FIRST" selector-expression="#[payload[&quot;last_validated&quot;]]"/>
-            <db:select config-ref="Generic_Database_Configuration" target="#[payload]" maxRows="10" fetchSize="10" doc:name="Rules Database" streaming="true">
+            <db:select config-ref="Generic_Database_Configuration" target="#[payload]" maxRows="10" fetchSize="10" doc:name="Rules Database" >
                 <db:dynamic-query><![CDATA[select * from "pandora_rules"
-where "last_validated" > '#[flowVars.lastValidatedTime]'
+where "last_validated" >= '#[flowVars.lastValidatedTime]'
 order by "last_validated" desc]]></db:dynamic-query>
             </db:select>
         </poll>
-        <set-variable variableName="TEST" value="${testRuleCategories}" doc:name="Variable"/>
-        <set-variable variableName="TEST" value="#[java.util.Arrays.asList(flowVars.TEST.split(','))]" doc:name="Variable"/>
-        <logger message="Sending Pandora Rules to Collibra" level="INFO" doc:name="Logger"/>
+        <set-variable variableName="testRuleCategories" value="${testRuleCategories}" doc:name="Set testRuleCategories from properties"/>
+        <set-variable variableName="testRuleCategories" value="#[java.util.Arrays.asList(flowVars.testRuleCategories.split(','))]" doc:name="Split Test rule Name"/>
+        <set-variable variableName="communityName" value="${communityName}" doc:name="set communityName"/>
+        <set-variable variableName="externalSystemId" value="${externalSystemId}" doc:name="Set externalSystemId"/>
+        <logger message="Sending Pandora Rules to Collibra" level="INFO" doc:name="Sending has begun"/>
         <foreach counterVariableName="ruleIndex" rootMessageVariableName="rules" doc:name="For Each">
             <choice doc:name="Choice">
-                <when expression="#[!flowVars.TEST.contains(payload.rule_category)]">
+                <when expression="#[!flowVars.testRuleCategories.contains(payload.rule_category)]">
                     <logger message="Request successfully sent for processing" level="INFO" doc:name="Logger"/>
                     <dw:transform-message doc:name="Transform to JSON Payload">
                         <dw:set-payload><![CDATA[%dw 1.0
 %output application/json
 ---
 {
-	 "externalSystemId": "Pandora 5.9.4",
-	 "communityName": "MyCommunity",
+	 "externalSystemId": flowVars.externalSystemId,
+	 "communityName": flowVars.communityName,
 	 "results": [{
 		 "externalEntityId": payload.external_database ++ "." ++ payload.external_schema ++ "." ++ payload.external_table_name ++ "." ++ payload.external_column_name,
 		 "name": payload.name,
 		 "dataQualityRuleName": payload.description match {
-		 	/^([^.]+)\./ -> $[1],
+		 	/([^.]+)\.([^.]+)\.([^.]+)/ -> $[1],
+		 	/([^.]+)\.([^.]+)\./ -> $[1],
+		 	/([^.]+)\./ -> $[1],		 	
 		 	default -> ""
 		 },	
 		 "note": payload.function,
 		 "dimension": payload.description match {
-		 	/^([^.]+)\.([^.]+)\./ -> $[2],
+		 	/([^.]+)\.([^.]+)\.([^.]+)/ -> $[2],
+		 	/([^.]+)\.([^.]+)\./ -> $[2],		 	
 		 	default -> ""
 		 },	 	 
 		 "description": payload.description match {
-		 	/^([^.]+)\.([^.]+)\.([^.]+)/ -> $[3],
+		 	/([^.]+)\.([^.]+)\.([^.]+)/ -> $[3],
 		 	default -> ""
 		 },	 
 		 "evaluatedColumns": [{
@@ -85,9 +90,10 @@ order by "last_validated" desc]]></db:dynamic-query>
  }]]></dw:set-payload>
                     </dw:transform-message>
                     <set-payload value="#[[&quot;flowId&quot;: &quot;updateRules&quot;, &quot;payload&quot;: payload]]" doc:name="Set Payload"/>
-                    <http:request config-ref="HTTP_Request_Configuration" path="/collibra.connect.gateway" method="POST" followRedirects="false" parseResponse="false" doc:name="HTTP">
+                    <http:request config-ref="HTTP_Request_Configuration" path="/collibra.connect.gateway" method="POST" followRedirects="false" parseResponse="false" doc:name="HTTP" sendBodyMode="ALWAYS" >
                         <http:request-builder>
                             <http:header headerName="Content-Type" value="application/x-www-form-urlencoded"/>
+
                         </http:request-builder>
                     </http:request>
                 </when>
@@ -100,7 +106,7 @@ order by "last_validated" desc]]></db:dynamic-query>
     
         <flow name="sendPandoraAlertsFlow" processingStrategy="synchronous" doc:description="The sendPandoraAlertsFlow polls the pandora_alerts table for changes and triggers an alert in Pandora. ">
         <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="60" timeUnit="SECONDS" />
+            <fixed-frequency-scheduler frequency="60" timeUnit="SECONDS" startDelay="60"/>
 			<watermark variable="lastModifiedDate" default-expression="&quot;1970-01-01 00:00:00&quot;" selector="FIRST" selector-expression="#[payload.last_modified_on]"/>
             <db:select config-ref="Generic_Database_Configuration" target="#[payload]" doc:name="Alerts Database">
                 <db:dynamic-query><![CDATA[select last_modified_on from "pandora_alerts" 
@@ -112,7 +118,9 @@ order by "last_modified_on" desc]]></db:dynamic-query>
         <choice doc:name="Choice">
             <when expression="#[payload != []]">
                 <logger message="Variable payload: #[payload]" level="INFO" doc:name="Logger"/>
-                <file:outbound-endpoint path="C:\pandora\import" outputPattern="TEST_VOYA_trigger.xml" connector-ref="File" responseTimeout="10000" doc:name="File"/>
+                <set-variable variableName="pandoraAlertTriggerDirectory" value="${pandoraAlertTriggerDirectory}" doc:name="Set pandoraAlertTriggerDirectory"/>
+                <set-variable variableName="pandoraAlertTriggerFileName" value="${pandoraAlertTriggerFileName}" doc:name="Set pandoraAlertTriggerFileName"/>
+                <file:outbound-endpoint path="#[flowVars.pandoraAlertTriggerDirectory]" outputPattern="#[flowVars.pandoraAlertTriggerFileName]" connector-ref="File" responseTimeout="10000" doc:name="File"/>
                 <logger message="Changes detected - file updated." level="INFO" doc:name="Logger"/>
             </when>
             <otherwise>
@@ -122,8 +130,8 @@ order by "last_modified_on" desc]]></db:dynamic-query>
     </flow>
     <flow name="sendNewRulestoDatabase" doc:description="The sendNewRulesToDatabase flow sends rules present in specified Rulebook to a database as configured. ">
         <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="60" timeUnit="SECONDS" />
-            <collibra-dgc:list-assets config-ref="CollibraDGC__Connection_Managament_type_strategy" domainId="f23ef3f5-6949-42bb-9869-ea58ada1205e" doc:name="CollibraDGC"/>
+            <fixed-frequency-scheduler frequency="60" timeUnit="SECONDS" startDelay="60"/>
+            <collibra-dgc:list-assets config-ref="CollibraDGC__Connection_Managament_type_strategy" domainId="${rulebookDomainId}" doc:name="CollibraDGC"/>
         </poll>
         <logger message="Sending Collibra Rules to database" level="INFO" doc:name="Logger"/>
         <choice doc:name="Choice">
