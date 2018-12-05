@@ -168,7 +168,7 @@ payload map ((result , index) -> {
 	"00000000-0000-0000-0000-000000000240": [{
 		value: result.qualityScore as :string
 	}],
-	"00000000-0000-0000-0000-000000007018:TARGET": result.evaluatedColumns map ((column, colIndex) -> {
+	"${assetToGovernanceAssetId}:TARGET": result.evaluatedColumns map ((column, colIndex) -> {
 		name: generateColumnName(column),
 		domain: {
 			name: generateDomainNameForDataCatalogAssets(column),
@@ -182,7 +182,7 @@ payload map ((result , index) -> {
 		value: $
 	})
 	),
-	"63d6a62f-e15b-40cb-b3ee-f6aa01ae05e7:TARGET": [{
+	"${dataQualityDimensionToDataQualityMetricId}:TARGET": [{
 		name: result.dimension,
 		domain: {
 			id: p('dataQualityDimensionsDomainTypeId')
