@@ -13,13 +13,13 @@ http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/cor
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
 http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
-    <collibra-dgc:config name="CollibraDGC__Connection_Managament_type_strategy" username="Admin" password="Password123" baseApplicationUrl="https://experian-dev-54.collibra.com" doc:name="CollibraDGC: Connection Managament type strategy"/>
-    <db:generic-config name="Generic_Database_Configuration" url="jdbc:postgresql://localhost:5432/postgres?user=postgres&amp;password=postgres" driverClassName="org.postgresql.Driver" doc:name="Generic Database Configuration"/>
+    <collibra-dgc:config name="CollibraDGC__Connection_Managament_type_strategy" username="${collibraUserName}" password="${collibraPassword}" baseApplicationUrl="${collibraUrl}" doc:name="CollibraDGC: Connection Managament type strategy"/>
     <file:connector name="File" autoDelete="false" streaming="true" validateConnections="true" doc:name="File" outputAppend="true">
     </file:connector>
     <http:request-config responseTimeout="90000" name="HTTP_Request_Configuration" host="localhost" port="8083" doc:name="HTTP Request Configuration" usePersistentConnections="false">
         <http:basic-authentication username="connect_user" password="connect_password" preemptive="true"/>
     </http:request-config>
+    <db:generic-config name="Generic_Database_Configuration" url="jdbc:postgresql://localhost:5432/postgres?user=postgres&amp;password=postgres" driverClassName="org.postgresql.Driver" doc:name="Generic Database Configuration"/>
     <flow name="updateRulesFlow" processingStrategy="synchronous">
         <poll doc:name="Poll">
             <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS" startDelay="15"/>
@@ -112,6 +112,7 @@ order by "last_validated" desc]]></db:dynamic-query>
                 <db:dynamic-query><![CDATA[select last_modified_on from "pandora_alerts" 
 where "last_modified_on" > '#[flowVars.lastModifiedDate]'
 order by "last_modified_on" desc]]></db:dynamic-query>
+
             </db:select>
         </poll>
         <logger message="Querying for Pandora alerts: #[payload]" level="INFO" doc:name="Logger"/>
@@ -130,7 +131,7 @@ order by "last_modified_on" desc]]></db:dynamic-query>
     </flow>
     <flow name="sendNewRulestoDatabase" doc:description="The sendNewRulesToDatabase flow sends rules present in specified Rulebook to a database as configured. ">
         <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="60" timeUnit="SECONDS" startDelay="60"/>
+            <fixed-frequency-scheduler frequency="15"  timeUnit="SECONDS"/>
             <collibra-dgc:list-assets config-ref="CollibraDGC__Connection_Managament_type_strategy" domainId="${rulebookDomainId}" doc:name="CollibraDGC"/>
         </poll>
         <logger message="Sending Collibra Rules to database" level="INFO" doc:name="Logger"/>
@@ -152,7 +153,7 @@ order by "last_modified_on" desc]]></db:dynamic-query>
                             <collibra-dgc:get-user config-ref="CollibraDGC__Connection_Managament_type_strategy" userId="#[flowVars.collibraRule.createdBy]" doc:name="Get createdBy user"/>
                             <set-variable variableName="createdBy" value="#[payload.emailAddress]" doc:name="Variable"/>
                             <logger message="Checking database for rule existence" level="INFO" doc:name="Logger"/>
-                            <db:select config-ref="Generic_Database_Configuration" queryTimeout="1000" doc:name="Check if Rule is in database" streaming="true">
+                            <db:select config-ref="Generic_Database_Configuration" streaming="true" queryTimeout="1000" doc:name="Check if Rule is in database">
                                 <db:parameterized-query><![CDATA[select "id" from "pandora_alerts"
 where "id" = #[flowVars.collibraRule.id]]]></db:parameterized-query>
                             </db:select>
@@ -188,5 +189,6 @@ VALUES (#[flowVars.collibraRule.id], #[flowVars.creationDate], #[flowVars.create
             </otherwise>
         </choice>
     </flow>
+
            
 </mule>
