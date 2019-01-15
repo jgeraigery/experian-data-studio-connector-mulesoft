@@ -152,7 +152,7 @@ payload map ((result , index) -> {
 		community: {
 			name: flowVars.communityName
 		}
-	},	
+	},
 	"00000000-0000-0000-0000-000000000239": [{
 		value: result.threshold as :string
 	}],

@@ -42,7 +42,7 @@ order by "last_validated" desc]]></db:dynamic-query>
                     <dw:transform-message doc:name="Parse values from string and parameters" metadata:id="7608f222-9a00-4f9a-99b7-ed8fbc4be726">
                         <dw:input-payload doc:sample="sample_data\pandoraRule.dwl" mimeType="application/java"/>
                         <dw:set-variable variableName="values"><![CDATA[%dw 2.0
-%output application/json
+%output application/java
 ---
 {
 	externalDatabaseName: payload.connection_string match {
@@ -52,14 +52,25 @@ order by "last_validated" desc]]></db:dynamic-query>
 	externalColumnName: payload.parameters match {
 		/.*Input=(.*)\ \ \ \ .*/ -> payload.external_column_name when (payload.external_column_name != null) otherwise $[1] replace " " with "_",
 		default -> payload.external_column_name
+	},
+	dataQualityRule: payload.description match {
+		/.*DATA_QUALITY_RULE=([^;]*).*/ -> $[1],
+		default -> null
+	},
+	dataQualityDimension: payload.description match {
+		/.*DIMENSION=([^;]*).*/ -> $[1],
+		default -> null
+	},
+	dataQualityRuleDescription: payload.description match {
+		/.*DESCRIPTION=([^;]*).*/ -> $[1],
+		default -> null
 	}
 }]]></dw:set-variable>
                     </dw:transform-message>
-                    <logger message="FLOW VARS: #[flowVars.values] PAYLAOD: #[payload]" level="INFO" doc:name="Logger"/>
                     <dw:transform-message doc:name="Transform to JSON Payload" metadata:id="2c59745c-0ca5-4d5c-ac2d-204fd7bea120">
                         <dw:input-payload mimeType="application/java"/>
                         <dw:set-payload><![CDATA[%dw 1.0
-%output application/java
+%output application/json
 ---
 {
 	 "externalSystemId": flowVars.externalSystemId,
@@ -67,24 +78,12 @@ order by "last_validated" desc]]></db:dynamic-query>
 	 "results": [{
 		 "externalEntityId": flowVars.values.externalDatabaseName ++ "." ++ payload.external_schema ++ "." ++ payload.external_table_name ++ "." ++ flowVars.values.externalColumnName ++ "." ++ payload.name,
 		 "name": payload.name,
-		 "dataQualityRuleName": payload.description match {
-		 	/([^.]+)\.([^.]+)\.([^.]+)/ -> $[1],
-		 	/([^.]+)\.([^.]+)\./ -> $[1],
-		 	/([^.]+)\./ -> $[1],		 	
-		 	default -> ""
-		 },	
+		 "dataQualityRuleName": flowVars.values.dataQualityRule,
 		 "note": payload.function,
-		 "dimension": payload.description match {
-		 	/([^.]+)\.([^.]+)\.([^.]+)/ -> $[2],
-		 	/([^.]+)\.([^.]+)\./ -> $[2],		 	
-		 	default -> ""
-		 },	 	 
-		 "description": payload.description match {
-		 	/([^.]+)\.([^.]+)\.([^.]+)/ -> $[3],
-		 	default -> ""
-		 },	 
+		 "dimension": flowVars.values.dataQualityDimension,	 	 
+		 "description": flowVars.values.dataQualityRuleDescription, 
 		 "evaluatedColumns": [{
-			 "databaseName": lowVars.values.externalDatabaseName,
+			 "databaseName": flowVars.values.externalDatabaseName,
 			 "schemaName": payload.external_schema,
 			 "tableName": payload.external_table_name,
 			 "name": flowVars.values.externalColumnName

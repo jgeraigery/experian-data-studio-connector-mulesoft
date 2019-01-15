@@ -35,7 +35,7 @@
 	failed:0.00,
 	result:"Green",
 	external_schema:"public",
-	description:"Collibra Rule.Completeness.Test it out",
+	description:"DATA_QUALITY_RULE=Collibra Rule;DIMENSION=Completeness;DESCRIPTION=Test it out",
 	rule_category_id:0.00,
 	rows_failed:0.00,
 	table_version:9,
