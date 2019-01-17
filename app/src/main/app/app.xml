@@ -123,12 +123,13 @@ order by "last_validated" desc]]></db:dynamic-query>
     
         <flow name="sendPandoraAlertsFlow" processingStrategy="synchronous" doc:description="The sendPandoraAlertsFlow polls the pandora_alerts table for changes and triggers an alert in Pandora. ">
         <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS" startDelay="60"/>
+            <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS" />
 			<watermark variable="lastModifiedDate" default-expression="0" selector="FIRST" selector-expression="#[payload.last_modified_on]"/>
             <db:select config-ref="Generic_Database_Configuration" target="#[payload]" doc:name="Alerts Database">
-                <db:dynamic-query><![CDATA[select last_modified_on from "pandora_alerts" 
+                <db:dynamic-query><![CDATA[select * from "pandora_alerts" 
 where "last_modified_on" > #[flowVars.lastModifiedDate]
 order by "last_modified_on" desc]]></db:dynamic-query>
+
 
             </db:select>
         </poll>
@@ -149,12 +150,14 @@ order by "last_modified_on" desc]]></db:dynamic-query>
     <flow name="sendNewRulestoDatabase" processingStrategy="synchronous" doc:description="The sendNewRulesToDatabase flow sends rules present in specified Rulebook to a database as configured. ">
         <poll doc:name="Poll">
             <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS"/>
-            <collibra-dgc:list-assets config-ref="CollibraDGC__Connection_Managament_type_strategy" domainId="${rulebookDomainId}" doc:name="CollibraDGC"/>
+            <watermark variable="newLastModificationDate" default-expression="0"/>
+            <collibra-dgc:list-assets config-ref="CollibraDGC__Connection_Managament_type_strategy" domainId="${rulebookDomainId}" doc:name="Get rules from Collibra" fetchSize="10"/>
         </poll>
-        <set-variable variableName="newLastModificationDate" value="0" doc:name="Variable"/>
+
         <choice doc:name="Choice">
-            <when expression="#[payload != null]">
-                <foreach doc:name="For Each">
+            <when expression="#[payload.hasNext()]">
+                <foreach doc:name="For Each" collection="#[org.apache.commons.collections.IteratorUtils.toList(payload)]">
+
                     <set-variable variableName="collibraRule" value="#[payload]" doc:name="Variable"/>
                     <collibra-dgc:get-user config-ref="CollibraDGC__Connection_Managament_type_strategy" userId="#[flowVars.collibraRule.lastModifiedBy]" doc:name="Get lastModifiedBy user"/>
                     <set-variable variableName="lastModifiedBy" value="#[payload.emailAddress]" doc:name="Variable"/>
@@ -177,20 +180,21 @@ last_modified_on = #[flowVars.collibraRule.lastModificationDate],
 name = #[flowVars.collibraRule.name]
 WHERE id = #[flowVars.collibraRule.id];]]></db:parameterized-query>
                             </db:update>
+                            <set-variable variableName="newLastModificationDate" value="#[flowVars.collibraRule.lastModificationDate]" doc:name="Set newLastModificationDate"/>
                         </when>
-                        <when expression="#[(flowVars.newLastModificationDate &lt; flowVars.collibraRule.lastModificationDate) and (payload.size() == 0)]">
+                        <when expression="#[(payload.size() == 0) and (flowVars.newLastModificationDate &lt; flowVars.collibraRule.lastModificationDate)]">
                             <logger message="Inserting rule in pandora_alerts table." level="INFO" doc:name="Insert rules"/>
                             <db:insert config-ref="Generic_Database_Configuration" doc:name="Insert Rule">
                                 <db:parameterized-query><![CDATA[INSERT INTO pandora_alerts (id, created_on, created_by, last_modified_on, last_modified_by, name, domain_id, domain_name)
 VALUES (#[flowVars.collibraRule.id], #[flowVars.collibraRule.creationDate], #[flowVars.createdBy], #[flowVars.collibraRule.lastModificationDate], #[flowVars.lastModifiedBy], #[flowVars.collibraRule.name], #[flowVars.collibraRule.domain.id], #[flowVars.collibraRule.domain.name])]]></db:parameterized-query>
                             </db:insert>
+                            <set-variable variableName="newLastModificationDate" value="#[flowVars.collibraRule.lastModificationDate]" doc:name="Set newLastModificationDate"/>
                         </when>
                         <otherwise>
                             <logger message="No changes found in the collibra rules" level="INFO" doc:name="Logger"/>
                         </otherwise>
                     </choice>
-                    <set-session-variable variableName="newLastModificationDate" value="#[flowVars.collibraRule.lastModificationDate]" doc:name="Session Variable"/>
-                    <set-variable variableName="newLastModificationDate" value="#[flowVars.collibraRule.lastModificationDate]" doc:name="Set newLastModificationDate"/>
+
                 </foreach>
             </when>
             <otherwise>
