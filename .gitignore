@@ -1,4 +1,8 @@
 .metadata/**/*
 .mule/**/*
 /collibra-domain-1.1.0/**/*
+/collibra-domain/**/*
 /.metadata/
+studio_id.xml
+gateway/**/*
+
