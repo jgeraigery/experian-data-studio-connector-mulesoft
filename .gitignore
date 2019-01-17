@@ -1,12 +1,16 @@
 app/catalog/**/*
 app/.settings/**/*
+app/.classpath
 app/src/main/app/mule-app.properties
 app/src/main/app/mule-deploy.properties
+app/src/test/**/*
 
 dq-result-listener/**/*
+experian-data-quality-connector/**/*
 gateway/**/*
 collibra-domain/**/*
 collibra-domain-1.1.0/**/*
+collibra-domain-1.1.0
 studio_id.xml
 .metadata/**/*
 .mule/**/*
