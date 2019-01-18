@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:collibra-dgc="http://www.mulesoft.org/schema/mule/collibra-dgc" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+<mule xmlns:sftp="http://www.mulesoft.org/schema/mule/sftp" xmlns:metadata="http://www.mulesoft.org/schema/mule/metadata" xmlns:scripting="http://www.mulesoft.org/schema/mule/scripting" xmlns:json="http://www.mulesoft.org/schema/mule/json" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns:collibra-dgc="http://www.mulesoft.org/schema/mule/collibra-dgc" xmlns:db="http://www.mulesoft.org/schema/mule/db" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:spring="http://www.springframework.org/schema/beans" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
@@ -12,7 +12,8 @@ http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee
 http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
 http://www.mulesoft.org/schema/mule/json http://www.mulesoft.org/schema/mule/json/current/mule-json.xsd
-http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd">
+http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mule/scripting/current/mule-scripting.xsd
+http://www.mulesoft.org/schema/mule/sftp http://www.mulesoft.org/schema/mule/sftp/current/mule-sftp.xsd">
     <collibra-dgc:config name="CollibraDGC__Connection_Managament_type_strategy" username="${collibraUserName}" password="${collibraPassword}" baseApplicationUrl="${collibraUrl}" doc:name="CollibraDGC: Connection Managament type strategy"/>
     <file:connector name="File" autoDelete="false" streaming="true" validateConnections="true" doc:name="File" outputAppend="true">
     </file:connector>
@@ -22,7 +23,7 @@ http://www.mulesoft.org/schema/mule/scripting http://www.mulesoft.org/schema/mul
     <db:generic-config name="Generic_Database_Configuration" url="jdbc:postgresql://localhost:5432/postgres?user=postgres&amp;password=postgres" driverClassName="org.postgresql.Driver" doc:name="Generic Database Configuration"/>
     <flow name="updateRulesFlow" processingStrategy="synchronous">
         <poll doc:name="Poll">
-            <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS" startDelay="60"/>
+            <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS" />
             <watermark variable="lastValidatedTime" default-expression="1970-01-01 00:00:00" selector="FIRST" selector-expression="#[payload[&quot;last_validated&quot;]]"/>
             <db:select config-ref="Generic_Database_Configuration" target="#[payload]" maxRows="10" fetchSize="10" doc:name="Rules Database" >
                 <db:dynamic-query><![CDATA[select * from "pandora_rules"
@@ -39,16 +40,19 @@ order by "last_validated" desc]]></db:dynamic-query>
             <choice doc:name="Choice">
                 <when expression="#[!flowVars.testRuleCategories.contains(payload.rule_category)]">
                     <logger message="Request successfully sent for processing" level="INFO" doc:name="Logger"/>
+                    <set-variable variableName="externalDatabaseNameRegex" value="${connectionStringExternalDatabaseRegex}" doc:name="Set regex"/>
+                    <set-variable variableName="externalSchemaNameRegex" value="${connectionStringExternalSchemaRegex}" doc:name="Set regex"/>
+                    <set-variable variableName="externalDatabaseName" value="#[if (payload.external_database == null) regex(flowVars.externalDatabaseNameRegex, payload.connection_string); else payload.external_database]" doc:name="externalDatabaseName"/>
+                    <set-variable variableName="externalSchemaName" value="#[if (payload.external_schema == null) regex(flowVars.externalSchemaNameRegex, payload.connection_string); else payload.external_schema]" doc:name="externalSchemaName"/>
+                    <logger message="flow var : #[flowVars] payload: #[payload]" level="INFO" doc:name="Logger"/>
                     <dw:transform-message doc:name="Parse values from string and parameters" metadata:id="7608f222-9a00-4f9a-99b7-ed8fbc4be726">
-                        <dw:input-payload doc:sample="sample_data\pandoraRule.dwl" mimeType="application/java"/>
+                        <dw:input-payload doc:sample="sample_data\pandoraRule_1.dwl" mimeType="application/java"/>
+                        <dw:input-variable doc:sample="sample_data\string.dwl" mimeType="application/java" variableName="externalDatabaseNameRegex"/>
+                        <dw:input-variable doc:sample="sample_data\string_1.dwl" mimeType="application/java" variableName="externalSchemaNameRegex"/>
                         <dw:set-variable variableName="values"><![CDATA[%dw 2.0
 %output application/java
 ---
-{
-	externalDatabaseName: payload.connection_string match {
-	 	/.*(EXTERNAL_DATABASE_NAME=(\w+)).*/ ->  payload.external_database when (payload.external_database != null) otherwise ($[2]),
-	 	default -> payload.external_database
-	},
+{	 	
 	externalColumnName: payload.parameters match {
 		/.*Input=(.*)\ \ \ \ .*/ -> payload.external_column_name when (payload.external_column_name != null) otherwise $[1] replace " " with "_",
 		default -> payload.external_column_name
@@ -76,15 +80,15 @@ order by "last_validated" desc]]></db:dynamic-query>
 	 "externalSystemId": flowVars.externalSystemId,
 	 "communityName": flowVars.communityName,
 	 "results": [{
-		 "externalEntityId": flowVars.values.externalDatabaseName ++ "." ++ payload.external_schema ++ "." ++ payload.external_table_name ++ "." ++ flowVars.values.externalColumnName ++ "." ++ payload.name,
+		 "externalEntityId": flowVars.externalDatabaseName ++ "." ++ flowVars.externalSchemaName ++ "." ++ payload.external_table_name ++ "." ++ flowVars.values.externalColumnName ++ "." ++ payload.name,
 		 "name": payload.name,
 		 "dataQualityRuleName": flowVars.values.dataQualityRule,
 		 "note": payload.function,
 		 "dimension": flowVars.values.dataQualityDimension,	 	 
 		 "description": flowVars.values.dataQualityRuleDescription, 
 		 "evaluatedColumns": [{
-			 "databaseName": flowVars.values.externalDatabaseName,
-			 "schemaName": payload.external_schema,
+			 "databaseName": flowVars.externalDatabaseName,
+			 "schemaName": flowVars.externalSchemaName,
 			 "tableName": payload.external_table_name,
 			 "name": flowVars.values.externalColumnName
 	 	 }],
@@ -139,7 +143,19 @@ order by "last_modified_on" desc]]></db:dynamic-query>
                 <logger message="Variable payload: #[payload]" level="INFO" doc:name="Logger"/>
                 <set-variable variableName="pandoraAlertTriggerDirectory" value="${pandoraAlertTriggerDirectory}" doc:name="Set pandoraAlertTriggerDirectory"/>
                 <set-variable variableName="pandoraAlertTriggerFileName" value="${pandoraAlertTriggerFileName}" doc:name="Set pandoraAlertTriggerFileName"/>
-                <file:outbound-endpoint path="#[flowVars.pandoraAlertTriggerDirectory]" outputPattern="#[flowVars.pandoraAlertTriggerFileName]" connector-ref="File" responseTimeout="10000" doc:name="File"/>
+                <set-variable variableName="useSFTP" value="${useSFTP}" doc:name="Variable"/>
+                <set-payload value="  " doc:name="Set Payload"/>
+                <choice doc:name="Choice">
+                    <when expression="#[flowVars.useSFTP]">
+                        
+                        <sftp:outbound-endpoint exchange-pattern="one-way" host="${sftpHost}" port="${sftpPort}" path="${pandoraAlertTriggerDirectory}" user="${sftpUsername}" password="${sftpPassword}" responseTimeout="10000" duplicateHandling="append" doc:name="SFTP" outputPattern="${pandoraAlertTriggerFileName}"/> 
+                        
+                    </when>
+                    <otherwise>
+                        <file:outbound-endpoint path="#[flowVars.pandoraAlertTriggerDirectory]" outputPattern="#[flowVars.pandoraAlertTriggerFileName]" connector-ref="File" responseTimeout="10000" doc:name="File"/>
+                    </otherwise>
+                </choice>
+
                 <logger message="Changes detected - file updated." level="INFO" doc:name="Logger"/>
             </when>
             <otherwise>

@@ -14,3 +14,4 @@ collibra-domain-1.1.0
 studio_id.xml
 .metadata/**/*
 .mule/**/*
+/.metadata/
