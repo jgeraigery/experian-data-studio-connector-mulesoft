@@ -46,15 +46,15 @@ order by "last_validated" desc]]></db:dynamic-query>
                     <set-variable variableName="externalSchemaName" value="#[if (payload.external_schema == null) regex(flowVars.externalSchemaNameRegex, payload.connection_string); else payload.external_schema]" doc:name="externalSchemaName"/>
                     <logger message="flow var : #[flowVars] payload: #[payload]" level="INFO" doc:name="Logger"/>
                     <dw:transform-message doc:name="Parse values from string and parameters" metadata:id="7608f222-9a00-4f9a-99b7-ed8fbc4be726">
-                        <dw:input-payload doc:sample="sample_data\pandoraRule_1.dwl" mimeType="application/java"/>
-                        <dw:input-variable doc:sample="sample_data\string.dwl" mimeType="application/java" variableName="externalDatabaseNameRegex"/>
-                        <dw:input-variable doc:sample="sample_data\string_1.dwl" mimeType="application/java" variableName="externalSchemaNameRegex"/>
+                        <dw:input-payload  mimeType="application/java" doc:sample="sample_data\pandoraRule_1.dwl"/>
+                        <dw:input-variable  mimeType="application/java" variableName="externalDatabaseNameRegex"/>
+                        <dw:input-variable  mimeType="application/java" variableName="externalSchemaNameRegex"/>
                         <dw:set-variable variableName="values"><![CDATA[%dw 2.0
 %output application/java
 ---
 {	 	
 	externalColumnName: payload.parameters match {
-		/.*Input=(.*)\ \ \ \ .*/ -> payload.external_column_name when (payload.external_column_name != null) otherwise $[1] replace " " with "_",
+		/.*=[^\.]*?[\.]*([a-zA-Z\s]*)\s{4}.*/ -> payload.external_column_name when (payload.external_column_name != null) otherwise $[1] replace " " with "_",
 		default -> payload.external_column_name
 	},
 	dataQualityRule: payload.description match {
@@ -167,13 +167,11 @@ order by "last_modified_on" desc]]></db:dynamic-query>
         <poll doc:name="Poll">
             <fixed-frequency-scheduler frequency="15" timeUnit="SECONDS"/>
             <watermark variable="newLastModificationDate" default-expression="0"/>
-            <collibra-dgc:list-assets config-ref="CollibraDGC__Connection_Managament_type_strategy" domainId="${rulebookDomainId}" doc:name="Get rules from Collibra" fetchSize="10"/>
+            <collibra-dgc:list-assets config-ref="CollibraDGC__Connection_Managament_type_strategy" domainId="${rulebookDomainId}" fetchSize="10" doc:name="Get rules from Collibra"/>
         </poll>
-
         <choice doc:name="Choice">
             <when expression="#[payload.hasNext()]">
-                <foreach doc:name="For Each" collection="#[org.apache.commons.collections.IteratorUtils.toList(payload)]">
-
+                <foreach collection="#[org.apache.commons.collections.IteratorUtils.toList(payload)]" doc:name="For Each">
                     <set-variable variableName="collibraRule" value="#[payload]" doc:name="Variable"/>
                     <collibra-dgc:get-user config-ref="CollibraDGC__Connection_Managament_type_strategy" userId="#[flowVars.collibraRule.lastModifiedBy]" doc:name="Get lastModifiedBy user"/>
                     <set-variable variableName="lastModifiedBy" value="#[payload.emailAddress]" doc:name="Variable"/>
@@ -210,7 +208,6 @@ VALUES (#[flowVars.collibraRule.id], #[flowVars.collibraRule.creationDate], #[fl
                             <logger message="No changes found in the collibra rules" level="INFO" doc:name="Logger"/>
                         </otherwise>
                     </choice>
-
                 </foreach>
             </when>
             <otherwise>
@@ -218,6 +215,7 @@ VALUES (#[flowVars.collibraRule.id], #[flowVars.collibraRule.creationDate], #[fl
             </otherwise>
         </choice>
     </flow>
+
 
            
 </mule>
