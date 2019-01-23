@@ -42,15 +42,17 @@ order by "last_validated" desc]]></db:dynamic-query>
                     <logger message="Request successfully sent for processing" level="INFO" doc:name="Logger"/>
                     <set-variable variableName="externalDatabaseNameRegex" value="${connectionStringExternalDatabaseRegex}" doc:name="Set regex"/>
                     <set-variable variableName="externalSchemaNameRegex" value="${connectionStringExternalSchemaRegex}" doc:name="Set regex"/>
+                    <set-variable variableName="parametersRegex" value="${parametersRegex}" doc:name="Set regex"/>
                     <set-variable variableName="externalDatabaseName" value="#[if (payload.external_database == null) regex(flowVars.externalDatabaseNameRegex, payload.connection_string); else payload.external_database]" doc:name="externalDatabaseName"/>
                     <set-variable variableName="externalSchemaName" value="#[if (payload.external_schema == null) regex(flowVars.externalSchemaNameRegex, payload.connection_string); else payload.external_schema]" doc:name="externalSchemaName"/>
+                    <set-variable variableName="externalColumnName" value="#[if (payload.external_column_name == null) regex(flowVars.parametersRegex, payload.parameters)[1].replace(&quot; &quot;, &quot;_&quot;); else payload.external_column_name]" doc:name="externalColumnName"/>
                     <logger message="flow var : #[flowVars] payload: #[payload]" level="INFO" doc:name="Logger"/>
                     <dw:transform-message doc:name="Parse values from string and parameters" metadata:id="7608f222-9a00-4f9a-99b7-ed8fbc4be726">
                         <dw:input-payload  mimeType="application/java" doc:sample="sample_data\pandoraRule_1.dwl"/>
                         <dw:input-variable  mimeType="application/java" variableName="externalDatabaseNameRegex"/>
                         <dw:input-variable  mimeType="application/java" variableName="externalSchemaNameRegex"/>
                         <dw:set-variable variableName="values"><![CDATA[%dw 2.0
-%output application/java
+%output application/json
 ---
 {	 	
 	externalColumnName: payload.parameters match {
@@ -80,7 +82,7 @@ order by "last_validated" desc]]></db:dynamic-query>
 	 "externalSystemId": flowVars.externalSystemId,
 	 "communityName": flowVars.communityName,
 	 "results": [{
-		 "externalEntityId": flowVars.externalDatabaseName ++ "." ++ flowVars.externalSchemaName ++ "." ++ payload.external_table_name ++ "." ++ flowVars.values.externalColumnName ++ "." ++ payload.name,
+		 "externalEntityId": flowVars.externalDatabaseName ++ "." ++ flowVars.externalSchemaName ++ "." ++ payload.external_table_name ++ "." ++ flowVars.externalColumnName ++ "." ++ payload.name,
 		 "name": payload.name,
 		 "dataQualityRuleName": flowVars.values.dataQualityRule,
 		 "note": payload.function,
@@ -90,7 +92,7 @@ order by "last_validated" desc]]></db:dynamic-query>
 			 "databaseName": flowVars.externalDatabaseName,
 			 "schemaName": flowVars.externalSchemaName,
 			 "tableName": payload.external_table_name,
-			 "name": flowVars.values.externalColumnName
+			 "name": flowVars.externalColumnName
 	 	 }],
 	 "rowsPassed": payload.rows_passed,
 	 "rowsFailed": payload.rows_failed,
